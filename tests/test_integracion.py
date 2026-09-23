@@ -211,6 +211,14 @@ def test_guia_no_incrusta_cifras():
     assert "/api/salud" in html and "/api/modelo" in html
 
 
+def test_tablero_es_un_documento_html_completo():
+    """Regresión: sin <meta viewport> los móviles renderizan a 980 px y recortan."""
+    html = (RAIZ / "web" / "index.html").read_text(encoding="utf-8")
+    assert html.lstrip().lower().startswith("<!doctype html>")
+    assert 'name="viewport"' in html and "width=device-width" in html
+    assert "<html" in html and "</html>" in html
+
+
 def test_tablero_se_sirve():
     r = cliente.get("/")
     assert r.status_code == 200

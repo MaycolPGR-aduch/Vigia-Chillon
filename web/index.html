@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>VIGÍA Chillón · TRL 4</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -192,10 +197,14 @@ footer b{color:var(--ink-2)}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 .nav{display:flex;gap:0;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--surface)}.nav a{display:block;padding:7px 14px;font-family:var(--display);font-weight:600;font-size:12.5px;color:var(--ink-2);text-decoration:none;border-right:1px solid var(--line)}.nav a:last-child{border-right:0}.nav a:hover{background:var(--surface-2)}.nav a[aria-current="page"]{background:var(--accent);color:#fff}
-.apirow{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:3px 0;border-bottom:1px solid var(--line-soft);font-family:var(--mono)}
-.apirow code{color:var(--ink-2)}.apirow .ok{color:var(--r1);font-weight:600}
+.apirow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;padding:3px 0;border-bottom:1px solid var(--line-soft);font-family:var(--mono)}
+.apirow code{color:var(--ink-2);overflow-wrap:anywhere}.apirow .ok{color:var(--r1);font-weight:600}
 .apirow .ms{color:var(--ink-3)}
 </style>
+<style>*{box-sizing:border-box}html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
 
 <header>
   <div class="hbar">
@@ -656,3 +665,6 @@ mq.addEventListener?.("change", () => { drawMap(); pintaChart(); });
 new MutationObserver(() => { drawMap(); pintaChart(); })
   .observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 </script>
+
+</body>
+</html>

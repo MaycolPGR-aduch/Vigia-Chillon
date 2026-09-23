@@ -471,10 +471,33 @@ def main() -> int:
 
     # 7) estilos del registro de llamadas
     tpl = tpl.replace("</style>",
-                      ".apirow{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:3px 0;"
+                      ".apirow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;padding:3px 0;"
                       "border-bottom:1px solid var(--line-soft);font-family:var(--mono)}\n"
-                      ".apirow code{color:var(--ink-2)}.apirow .ok{color:var(--r1);font-weight:600}\n"
+                      ".apirow code{color:var(--ink-2);overflow-wrap:anywhere}.apirow .ok{color:var(--r1);font-weight:600}\n"
                       ".apirow .ms{color:var(--ink-3)}\n</style>")
+
+    # 8) documento HTML completo: la plantilla venía de un entorno que inyectaba el
+    #    esqueleto (doctype, charset y viewport). Al servirla nosotros hay que ponerlo,
+    #    o los móviles renderizan a 980 px y recortan el contenido.
+    if "<!doctype" not in tpl.lower():
+        cabeza, _, resto = tpl.partition("</style>")
+        RESET = ("<style>*{box-sizing:border-box}html,body{margin:0}"
+                 "img{max-width:100%}[hidden]{display:none!important}</style>")
+        tpl = "\n".join([
+            '<!doctype html>',
+            '<html lang="es">',
+            '<head>',
+            '<meta charset="utf-8">',
+            '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">',
+            cabeza + "</style>",
+            RESET,
+            '</head>',
+            '<body>',
+            resto,
+            '</body>',
+            '</html>',
+            '',
+        ])
 
     SALIDA.parent.mkdir(parents=True, exist_ok=True)
     SALIDA.write_text(tpl, encoding="utf-8")
