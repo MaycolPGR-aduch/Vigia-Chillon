@@ -136,6 +136,38 @@ def test_detalle_de_celda_descompone_factores():
     assert set(j["factores"]) >= {"cercania_al_rio", "terreno_plano", "drenaje", "canales"}
 
 
+def test_campo_simulado_declara_su_naturaleza():
+    j = cliente.get("/api/campo-simulado", params={"fecha": "2023-03-11"}).json()
+    assert j["naturaleza"] == "SIMULADO"
+    assert "No son observaciones de campo" in j["advertencia"]
+    assert len(j["bitacora"]) == 8 and len(j["bitacora"][0]["dias"]) == 7
+
+
+def test_campo_simulado_es_determinista():
+    a = cliente.get("/api/campo-simulado", params={"fecha": "2023-03-11"}).json()
+    b = cliente.get("/api/campo-simulado", params={"fecha": "2023-03-11"}).json()
+    assert a == b
+
+
+def test_bitacora_reacciona_a_la_lluvia_real():
+    """En estiaje la bitácora debe producir solo negativos; con lluvias, positivos."""
+    seco = cliente.get("/api/campo-simulado", params={"fecha": "2015-08-03"}).json()
+    lluvioso = cliente.get("/api/campo-simulado", params={"fecha": "2023-03-11"}).json()
+    assert seco["etiquetas_que_produciria"]["positivos_de_campo"] == 0
+    assert lluvioso["etiquetas_que_produciria"]["positivos_de_campo"] > 0
+    assert (seco["etiquetas_que_produciria"]["negativos_verificados"]
+            > lluvioso["etiquetas_que_produciria"]["negativos_verificados"])
+    assert len(lluvioso["reportes"]) > len(seco["reportes"])
+
+
+def test_tablero_pinta_los_paneles_de_campo():
+    """Regresión: los paneles de campo existían en el HTML pero nadie los llenaba."""
+    html = (RAIZ / "web" / "index.html").read_text(encoding="utf-8")
+    assert 'id="feed"' in html and 'id="bit"' in html
+    assert "pintaCampo" in html, "falta la función que llena los paneles de campo"
+    assert "/api/campo-simulado" in html
+
+
 def test_eventos_sin_negativos():
     j = cliente.get("/api/eventos").json()
     assert len(j["eventos"]) == 8

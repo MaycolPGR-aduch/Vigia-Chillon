@@ -2,7 +2,7 @@
 
 **Propósito.** Acreditar el nivel de madurez tecnológica TRL 4 exigido por el concurso PROCIENCIA E067-2026-04: componentes integrados y validados en entorno controlado.
 
-- **Fecha de ejecución:** 23/09/2026 15:30 Hora est. Pacífico, Sudamérica
+- **Fecha de ejecución:** 23/09/2026 15:48 Hora est. Pacífico, Sudamérica
 - **Entorno:** Python 3.10.0 sobre Windows 10
 - **Versión del modelo:** `0.1.0-pu-distrital`
 - **Origen de los datos:** `datos\vigia.db` construida desde `2003-01-31 a 2026-07-31`
@@ -41,7 +41,7 @@ Ejecutado el 2026-09-23T20:30:27+00:00. **13 controles, 0 fallidos.**
 ## 3. Pruebas automatizadas de integración
 
 ```
-22 passed, 3 warnings in 1.87s
+26 passed, 3 warnings in 1.85s
 ```
 
 Cubren: existencia e integridad de la base analítica, políticas metodológicas (faltantes como NULL, ausencia de negativos), ficha del modelo, respuestas de todos los recursos de la API, manejo de errores, determinismo y ausencia de datos embebidos en el tablero. Reproducible con `pytest -v`.
@@ -52,11 +52,11 @@ Cada fila es una consulta real a `GET /api/riesgo`: el servidor lee la lluvia ob
 
 | Fecha | Contexto | Lluvia 3 d (mm) | Probabilidad | Clase | Celdas alto/muy alto | Población | Evento en SINPAD | Cálculo |
 |---|---|---|---|---|---|---|---|---|
-| 2023-03-11 | lluvias del ciclón Yaku | 14.19 | 0.918 | Muy alto | 45 | 73 555 | no | 2.26 ms |
-| 2017-03-16 | Niño Costero | 9.2 | 0.812 | Muy alto | 35 | 55 845 | sí | 2.27 ms |
-| 2007-01-09 | evento registrado en SINPAD | 8.85 | 0.756 | Muy alto | 35 | 55 845 | sí | 1.31 ms |
-| 2015-08-03 | estiaje, sin evento | 0 | 0.086 | Bajo | 0 | 0 | no | 1.58 ms |
-| 2020-07-15 | invierno seco, sin evento | 0.09 | 0.097 | Bajo | 0 | 0 | no | 1.33 ms |
+| 2023-03-11 | lluvias del ciclón Yaku | 14.19 | 0.918 | Muy alto | 45 | 73 555 | no | 2.04 ms |
+| 2017-03-16 | Niño Costero | 9.2 | 0.812 | Muy alto | 35 | 55 845 | sí | 1.45 ms |
+| 2007-01-09 | evento registrado en SINPAD | 8.85 | 0.756 | Muy alto | 35 | 55 845 | sí | 1.26 ms |
+| 2015-08-03 | estiaje, sin evento | 0 | 0.086 | Bajo | 0 | 0 | no | 1.15 ms |
+| 2020-07-15 | invierno seco, sin evento | 0.09 | 0.097 | Bajo | 0 | 0 | no | 1.06 ms |
 
 La progresión entre fechas lluviosas y secas confirma que el encadenamiento fuentes → modelo → índice → API responde a la señal climática real y no a valores fijos.
 
@@ -64,11 +64,11 @@ La progresión entre fechas lluviosas y secas confirma que el encadenamiento fue
 
 | Recurso | Ruta | Mediana | p95 |
 |---|---|---|---|
-| salud | `/api/salud` | 3.47 ms | 4.15 ms |
-| celdas | `/api/celdas` | 12.06 ms | 12.61 ms |
-| riesgo | `/api/riesgo?fecha=2023-03-11` | 10.33 ms | 12.18 ms |
-| celda | `/api/celda/PP0500_R0011_C0014?fecha=2023-03-11` | 6.87 ms | 10.75 ms |
-| precipitacion | `/api/precipitacion?hasta=2023-03-11&dias=14` | 4.45 ms | 6.05 ms |
+| salud | `/api/salud` | 3.52 ms | 4.54 ms |
+| celdas | `/api/celdas` | 12.24 ms | 12.44 ms |
+| riesgo | `/api/riesgo?fecha=2023-03-11` | 6.41 ms | 7.66 ms |
+| celda | `/api/celda/PP0500_R0011_C0014?fecha=2023-03-11` | 4.31 ms | 4.72 ms |
+| precipitacion | `/api/precipitacion?hasta=2023-03-11&dias=14` | 3.96 ms | 4.68 ms |
 
 ## 6. Desempeño del modelo base
 

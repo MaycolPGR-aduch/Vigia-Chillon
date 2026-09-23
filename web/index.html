@@ -285,14 +285,14 @@ footer b{color:var(--ink-2)}
   <div class="grid2" id="sec-campo">
     <section class="card">
       <div class="head"><h2>Reportes ciudadanos</h2><span class="hint" id="rep-count">simulados</span></div>
-      <div class="body"><div class="feed" id="feed"></div></div>
+      <div class="body"><div class="feed" id="feed"></div><p style="margin:12px 0 0;font-size:11px;color:var(--ink-3)">Servidos por <code>GET /api/campo-simulado</code>. No son observaciones reales: la red de vigías y el canal ciudadano son el objeto del proyecto.</p></div>
     </section>
 
     <section class="card">
       <div class="head"><h2>Bitácora de vigías</h2><span class="hint">7 días · 8 puntos</span></div>
       <div class="body">
         <div class="tablewrap"><div class="bit" id="bit"></div></div>
-        <div class="legend" style="margin-top:12px;flex-direction:row;flex-wrap:wrap;gap:12px">
+        <p id="etiquetas" style="margin:12px 0 0;padding:9px 12px;border-radius:7px;background:var(--surface-2);border:1px solid var(--line-soft);font-size:11.5px;color:var(--ink-2)"></p><div class="legend" style="margin-top:12px;flex-direction:row;flex-wrap:wrap;gap:12px">
           <div class="row"><span class="sw" style="background:color-mix(in srgb,var(--r1) 82%,transparent)"></span> Sin novedad → negativo verificado</div>
           <div class="row"><span class="sw" style="background:var(--r3)"></span> Nivel alto</div>
           <div class="row"><span class="sw" style="background:var(--r4)"></span> Desborde → positivo</div>
@@ -539,6 +539,41 @@ async function pintaChart() {
   el.innerHTML = `${grid}${bars}${labs}<text x="${ml}" y="${mt - 3}" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="${cssv('--ink-3')}">mm/día · CHIRPS · GET /api/precipitacion</text>`;
 }
 
+/* ---------------- observación de campo (simulada, servida por la API) ---------------- */
+async function pintaCampo() {
+  let j;
+  try { j = await pedir(`/api/campo-simulado?fecha=${fechaActual}`); }
+  catch (e) { return; }
+
+  const ETIQ = { verificado: ["ok", "Verificado"], en_verificacion: ["wait", "En verificación"], en_atencion: ["act", "En atención"] };
+  document.getElementById("rep-count").textContent = `${j.reportes.length} en 48 h · simulados`;
+  document.getElementById("feed").innerHTML = j.reportes.map(r => {
+    const [cls, txt] = ETIQ[r.estado] || ETIQ.verificado;
+    return `<div class="rep"><div class="ico" aria-hidden="true">${r.icono}</div>
+      <div><div class="t">${r.titulo}</div>
+      <div class="m">${r.sector} · <span class="mono">${r.hora}</span></div>
+      <span class="chip ${cls}">${txt}</span></div></div>`;
+  }).join("");
+
+  const CLS = { sin_novedad: ["neg", "·", "Sin novedad"], nivel_alto: ["alt", "!", "Nivel alto"], desborde: ["pos", "▲", "Desborde"] };
+  const dias = j.bitacora[0].dias.map((d, i) => i === j.bitacora[0].dias.length - 1 ? "hoy" : `-${j.bitacora[0].dias.length - 1 - i}`);
+  let html = `<div></div>` + dias.map(d => `<div class="hd">${d}</div>`).join("");
+  for (const b of j.bitacora) {
+    html += `<div class="lbl" title="${b.punto}">${b.punto}</div>`;
+    for (const d of b.dias) {
+      const [cls, mk, tit] = CLS[d.estado];
+      html += `<div class="cellmark ${cls}" title="${b.punto} · ${d.fecha} · ${tit} (lluvia 3 d: ${d.lluvia_3d_mm} mm)">${mk}</div>`;
+    }
+  }
+  document.getElementById("bit").innerHTML = html;
+
+  const e = j.etiquetas_que_produciria;
+  const cont = document.getElementById("etiquetas");
+  if (cont) cont.innerHTML =
+    `<b>${e.negativos_verificados}</b> negativos verificados · <b>${e.positivos_de_campo}</b> positivos de campo · ` +
+    `<b>${e.reportes_verificados}</b> reportes validados. ${e.nota}`;
+}
+
 function pintaModelo() {
   const m = FICHA.metricas || {};
   const el = document.getElementById("modelo-info");
@@ -581,6 +616,7 @@ async function irAFecha(f) {
       b.setAttribute("aria-pressed", String(b.dataset.f === f)));
     pintaStrip(); drawMap(); pintaResumen(); pintaPuntos(); pintaTabla();
     await pintaChart();
+    await pintaCampo();
     await pintaDetalle(sel);
   } catch (e) {
     aviso.hidden = false;

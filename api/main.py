@@ -9,7 +9,7 @@ lluvia observada de la fecha solicitada y de los predictores de cada celda.
 Documentación interactiva en /docs (OpenAPI).
 Ejecución local:  uvicorn api.main:app --reload
 """
-import json, math, sqlite3, time
+import hashlib, json, math, sqlite3, time
 from datetime import date
 from functools import lru_cache
 from pathlib import Path
@@ -244,6 +244,98 @@ def eventos():
         "negativos_verificados": 0,
         "nota": ("La ausencia de reporte no equivale a ausencia de evento. Los días sin positivo "
                  "son NO ETIQUETADOS. Los negativos se producirán con la bitácora de vigías."),
+    }
+
+
+@app.get("/api/campo-simulado", tags=["campo"],
+         summary="SIMULADO: reportes ciudadanos y bitácora de vigías del piloto previsto")
+def campo_simulado(fecha: str = Query(..., description="AAAA-MM-DD")):
+    """
+    Estos datos NO son observaciones reales: el trabajo de campo es el objeto del
+    proyecto y todavía no existe. Se generan de forma determinista a partir de la
+    lluvia realmente observada en cada fecha para ilustrar cómo se vería el bucle
+    de aprendizaje en operación. El nombre del recurso lo declara explícitamente.
+    """
+    cx = conectar()
+    p = fila_precip(cx, fecha)
+    # los siete días previos, con su lluvia real: la bitácora reacciona a datos verdaderos
+    previos = [dict(r) for r in cx.execute(
+        "SELECT fecha, p_t0, p_3d FROM precipitacion WHERE fecha <= ? ORDER BY fecha DESC LIMIT 7",
+        (fecha,))][::-1]
+    puntos = [dict(r) for r in cx.execute("SELECT * FROM puntos_criticos ORDER BY lat DESC")]
+    cx.close()
+
+    def dado(*partes) -> float:
+        """Sorteo determinista en [0,1): la misma fecha devuelve siempre lo mismo."""
+        h = hashlib.sha256("|".join(str(x) for x in partes).encode()).hexdigest()
+        return int(h[:8], 16) / 0xFFFFFFFF
+
+    # --- bitácora: 8 puntos x 7 días ---
+    bitacora = []
+    for i, pt in enumerate(puntos):
+        celdas_dia = []
+        for d in previos:
+            lluvia = d["p_3d"] or 0
+            r = dado(d["fecha"], pt["codigo"])
+            if lluvia >= 12 and r < 0.35:
+                estado = "desborde"
+            elif lluvia >= 6 and r < 0.55:
+                estado = "nivel_alto"
+            elif lluvia >= 2 and r < 0.30:
+                estado = "nivel_alto"
+            else:
+                estado = "sin_novedad"
+            celdas_dia.append({"fecha": d["fecha"], "estado": estado,
+                               "lluvia_3d_mm": round(lluvia, 2)})
+        bitacora.append({"punto": pt["nombre"], "codigo": pt["codigo"], "dias": celdas_dia})
+
+    negativos = sum(1 for b in bitacora for d in b["dias"] if d["estado"] == "sin_novedad")
+    positivos = sum(1 for b in bitacora for d in b["dias"] if d["estado"] == "desborde")
+
+    # --- reportes ciudadanos: su número crece con la lluvia observada ---
+    CATALOGO = [
+        ("🌊", "Aniego en vía", "inundacion"),
+        ("🌊", "Agua ingresa a viviendas", "inundacion"),
+        ("🪵", "Canal obstruido con desmonte", "obstruccion"),
+        ("🪵", "Acumulación de residuos en dren", "obstruccion"),
+        ("🧱", "Muro de defensa con filtración", "infraestructura"),
+        ("⚠️", "Erosión de ribera", "erosion"),
+        ("🔥", "Quema de residuos junto al cauce", "mala_practica"),
+        ("🌊", "Calle inundada frente a la I.E.", "inundacion"),
+    ]
+    ESTADOS = ["verificado", "en_verificacion", "en_atencion"]
+    lluvia3 = p["p_3d"] or 0
+    n = 2 if lluvia3 < 1 else 4 if lluvia3 < 6 else 7 if lluvia3 < 12 else 9
+    horas = ["hace 40 min", "hace 1 h", "hace 2 h", "hace 3 h", "hace 5 h",
+             "hace 6 h", "hace 8 h", "ayer", "ayer"]
+    reportes = []
+    for k in range(n):
+        r = dado(fecha, "rep", k)
+        ic, titulo, tipo = CATALOGO[int(dado(fecha, "cat", k) * len(CATALOGO))]
+        pt = puntos[int(r * len(puntos))]
+        # con poca lluvia predominan las malas prácticas; con mucha, las inundaciones
+        if lluvia3 < 2 and tipo == "inundacion":
+            ic, titulo, tipo = CATALOGO[6]
+        reportes.append({
+            "icono": ic, "titulo": titulo, "tipo": tipo,
+            "sector": pt["nombre"], "hora": horas[k % len(horas)],
+            "estado": ESTADOS[int(dado(fecha, "est", k) * 3)],
+        })
+
+    return {
+        "naturaleza": "SIMULADO",
+        "advertencia": ("Datos ilustrativos generados de forma determinista a partir de la "
+                        "lluvia observada. No son observaciones de campo: la red de vigías y "
+                        "el canal ciudadano son el objeto del proyecto."),
+        "fecha": fecha,
+        "reportes": reportes,
+        "bitacora": bitacora,
+        "etiquetas_que_produciria": {
+            "negativos_verificados": negativos,
+            "positivos_de_campo": positivos,
+            "reportes_verificados": sum(1 for r in reportes if r["estado"] != "en_verificacion"),
+            "nota": "así es como la bitácora generaría las etiquetas que hoy no existen",
+        },
     }
 
 

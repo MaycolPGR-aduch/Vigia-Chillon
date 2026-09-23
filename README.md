@@ -130,6 +130,7 @@ gcloud run deploy vigia-chillon --source . --region southamerica-west1 --allow-u
 | GET | `/api/precipitacion` | serie diaria CHIRPS de la cuenca del Chillón |
 | GET | `/api/riesgo?fecha=` | **índice y clase de las 260 celdas, calculado en la petición** |
 | GET | `/api/celda/{id}?fecha=` | detalle de una celda y descomposición de su índice en factores |
+| GET | `/api/campo-simulado?fecha=` | **SIMULADO**: reportes y bitácora del piloto previsto, generados de forma determinista a partir de la lluvia real |
 | GET | `/api/eventos` | los 8 positivos corroborados; declara que no hay negativos |
 | GET | `/api/modelo` | ficha del modelo: métricas, límites y usos previstos |
 | GET | `/docs` | documentación interactiva OpenAPI |
@@ -153,6 +154,20 @@ Heredadas del protocolo de la base maestra (Fase 32) y verificadas por las prueb
   independiente, de modo que la cifra es una cota optimista.
 - **Trazabilidad.** Cada carga registra el SHA-256 del archivo de origen, la fecha de
   extracción y el resultado de los 13 controles de calidad.
+
+## Qué es real y qué es simulado
+
+| Elemento | Naturaleza |
+|---|---|
+| Malla, predictores, puntos críticos, lluvia CHIRPS, eventos SINPAD | **reales**, de la base maestra Fase 32 |
+| Índice territorial y probabilidad del modelo | **calculados** en cada petición sobre esos datos |
+| Reportes ciudadanos y bitácora de vigías | **simulados**, servidos por `/api/campo-simulado` |
+
+Los datos de campo se generan de forma determinista a partir de la lluvia realmente
+observada en cada fecha: en estiaje la bitácora produce solo jornadas sin novedad, y con
+lluvias intensas aparecen niveles altos y desbordes. Ilustran cómo se vería el bucle de
+aprendizaje en operación y cuántas etiquetas produciría, pero **no son observaciones**:
+la red de vigías y el canal ciudadano son el objeto del proyecto.
 
 ## Fuentes de datos
 
