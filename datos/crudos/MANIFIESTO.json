@@ -1,0 +1,119 @@
+{
+  "origen": "Base_Maestra_FEN_Puente_Piedra_Modelo_Predictivo_Fase32.xlsx",
+  "sha256_origen": "c5640f789aa83af283a89e587ef3e9e23149808c1b32c4c6987ec0ada43eaf51",
+  "extraido_utc": "2026-09-23T20:30:24+00:00",
+  "tablas": {
+    "malla": {
+      "hoja_origen": "MALLA_INEI_2023_F18",
+      "filas": 260,
+      "columnas": [
+        "spatial_id",
+        "fila",
+        "columna",
+        "área m²",
+        "lon",
+        "lat"
+      ],
+      "sha256": "bd90800defa1459b5fa33323289ce032acf673558e7aff01818b25758f8da291"
+    },
+    "predictores": {
+      "hoja_origen": "MATRIZ_CERT_F25",
+      "filas": 260,
+      "columnas": [
+        "spatial_id",
+        "elev_media_m",
+        "pendiente_media_grados",
+        "dist_río_m",
+        "drenaje_total_m",
+        "canales_n",
+        "dist_canal_m",
+        "vías_m",
+        "IE_n",
+        "alumnos_reportados",
+        "salud_n",
+        "puntos_PREDES_n",
+        "personas_PREDES"
+      ],
+      "sha256": "4383103853a59cfef5015e3506a7195eb88a77d86b04469244717edc50a3a872"
+    },
+    "poblacion": {
+      "hoja_origen": "WORLDPOP_500M_F29",
+      "filas": 260,
+      "columnas": [
+        "spatial_id",
+        "población modelada 2017"
+      ],
+      "sha256": "fe4a33e3ae9202101f4467b781a6d32908a2a2cabced87d713de1563c583dfb0"
+    },
+    "construido": {
+      "hoja_origen": "GHSL_BUILT_500M_F30",
+      "filas": 260,
+      "columnas": [
+        "spatial_id",
+        "superficie construida 2020 m²"
+      ],
+      "sha256": "dfbe576b130d0d39430a8501ff4f43699745e57e3aed0106b1c70de7778ff6c2"
+    },
+    "precipitacion": {
+      "hoja_origen": "PRECIP_CUENCA_DIARIA",
+      "filas": 8613,
+      "columnas": [
+        "fecha",
+        "precip_t0_mm",
+        "precip_prev_1d_mm",
+        "precip_prev_3d_mm",
+        "precip_prev_7d_mm",
+        "precip_prev_14d_mm",
+        "precip_prev_30d_mm"
+      ],
+      "sha256": "9c1bfe0ce8baa84e850a2d4f75149987b552ba4785bbbc85905fb1c5ce38fc94"
+    },
+    "eventos": {
+      "hoja_origen": "POSITIVOS_TEMPORALES_F28",
+      "filas": 8,
+      "columnas": [
+        "episodio",
+        "fecha ocurrencia",
+        "fenómeno",
+        "evidencia"
+      ],
+      "sha256": "8834617d30cb5ae1db6deef0bda57346dbad4e8c96d1417f08ddf3aa8a37c162"
+    },
+    "puntos_criticos": {
+      "hoja_origen": "PUNTOS_CRITICOS_2022",
+      "filas": 8,
+      "columnas": [
+        "código",
+        "ubicación",
+        "lon",
+        "lat",
+        "viviendas expuestas",
+        "personas expuestas",
+        "tipo peligro",
+        "dentro de malla"
+      ],
+      "sha256": "2cb5e8ba68efd7c89eae8b08b70093271418db541c764ffc828e44ea6fbfee58"
+    },
+    "enso": {
+      "hoja_origen": "ENSO",
+      "filas": 4186,
+      "columnas": [
+        "id_registro",
+        "indice",
+        "valor",
+        "unidad",
+        "anio",
+        "periodo_nativo",
+        "fecha_referencia",
+        "resolucion_temporal",
+        "version",
+        "fuente_url",
+        "fecha_acceso",
+        "dato_faltante",
+        "flag_calidad",
+        "observaciones"
+      ],
+      "sha256": "eb2440b72da0f2dd4323b32257a56077db4edc9445aeba7531799f27fdbd72c1"
+    }
+  }
+}

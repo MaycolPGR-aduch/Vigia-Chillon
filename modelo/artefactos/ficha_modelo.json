@@ -1,0 +1,118 @@
+{
+  "version": "0.1.0-pu-distrital",
+  "entrenado_utc": "2026-09-23T20:30:29+00:00",
+  "tipo": "regresión logística regularizada, aprendizaje positivo–no etiquetado",
+  "unidad": "distrito–día",
+  "ventana_entrenamiento": "2003-01-31 a 2026-07-31",
+  "rasgos": [
+    "lp_t0",
+    "lp_3d",
+    "lp_7d",
+    "lp_30d"
+  ],
+  "coeficientes": {
+    "lp_t0": 0.3475,
+    "lp_3d": 2.2756,
+    "lp_7d": -3.5139,
+    "lp_30d": 2.7594
+  },
+  "positivos": 8,
+  "no_etiquetados": 8575,
+  "negativos_verificados": 0,
+  "metricas": {
+    "percentil_mediano": 85.17,
+    "percentil_medio": 77.39,
+    "recall_at_10pct": 0.375,
+    "recall_at_20pct": 0.625,
+    "positivos_evaluados": 8,
+    "dias_evaluados": 8583,
+    "especificacion_elegida": "D_log",
+    "lineas_base": {
+      "p_3d": {
+        "percentil_mediano": 76.36,
+        "recall_at_10pct": 0.375
+      },
+      "p_7d": {
+        "percentil_mediano": 71.31,
+        "recall_at_10pct": 0.125
+      },
+      "p_30d": {
+        "percentil_mediano": 75.76,
+        "recall_at_10pct": 0.0
+      }
+    },
+    "comparacion_especificaciones": {
+      "A_completa": {
+        "rasgos": [
+          "p_t0",
+          "p_1d",
+          "p_3d",
+          "p_7d",
+          "p_14d",
+          "p_30d",
+          "mes_sin",
+          "mes_cos"
+        ],
+        "percentil_mediano": 66.69,
+        "percentil_medio": 65.03,
+        "recall_at_10pct": 0.25,
+        "recall_at_20pct": 0.375
+      },
+      "B_solo_lluvia": {
+        "rasgos": [
+          "p_t0",
+          "p_1d",
+          "p_3d",
+          "p_7d",
+          "p_14d",
+          "p_30d"
+        ],
+        "percentil_mediano": 75.27,
+        "percentil_medio": 70.92,
+        "recall_at_10pct": 0.375,
+        "recall_at_20pct": 0.375
+      },
+      "C_corta": {
+        "rasgos": [
+          "p_t0",
+          "p_3d",
+          "p_7d"
+        ],
+        "percentil_mediano": 80.38,
+        "percentil_medio": 68.72,
+        "recall_at_10pct": 0.25,
+        "recall_at_20pct": 0.5
+      },
+      "D_log": {
+        "rasgos": [
+          "lp_t0",
+          "lp_3d",
+          "lp_7d",
+          "lp_30d"
+        ],
+        "percentil_mediano": 85.17,
+        "percentil_medio": 77.39,
+        "recall_at_10pct": 0.375,
+        "recall_at_20pct": 0.625
+      }
+    },
+    "supera_linea_base": true
+  },
+  "metricas_no_reportables": [
+    "exactitud",
+    "especificidad",
+    "tasa de falsos positivos",
+    "precisión"
+  ],
+  "motivo": "No existen negativos observados. Los días sin positivo son NO ETIQUETADOS, por lo que toda métrica que requiera negativos verdaderos carece de sentido.",
+  "limitaciones": [
+    "El modelo opera a escala distrital, no por celda de 500 m.",
+    "Ocho positivos corroborados: la incertidumbre de cualquier estimación es alta.",
+    "La lluvia es de cuenca (CHIRPS) y no sustituye observación hidrológica local.",
+    "No incorpora caudal observado: las series de SENAMHI están pendientes de gestión.",
+    "Es una línea base para acreditar madurez, no el modelo territorial del proyecto.",
+    "SESGO DE SELECCIÓN DECLARADO: la especificación se eligió comparando las cuatro alternativas con la misma validación dejando-uno-fuera que se reporta. Con ocho positivos no es posible una selección independiente, de modo que el percentil mediano informado debe leerse como una cota optimista.",
+    "HALLAZGO: dos de los ocho positivos quedan mal ordenados por el modelo. El 26/01/2017 cae en el percentil 39 y el 20/05/2018 en el 68 pese a registrar 0.04 mm de lluvia acumulada en tres días. Son eventos que la lluvia de cuenca no explica, probablemente desbordes de canal o afectaciones muy localizadas. Es el argumento cuantitativo que sustenta el proyecto: el salto de desempeño exige etiquetas por celda producidas en campo, no más ajuste del modelo."
+  ],
+  "uso_previsto": "Priorización relativa de días de vigilancia a escala distrital. No sustituye los avisos oficiales de SENAMHI, INDECI, CENEPRED ni ANA."
+}

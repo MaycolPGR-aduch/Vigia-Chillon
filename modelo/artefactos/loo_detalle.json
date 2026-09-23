@@ -1,0 +1,66 @@
+[
+  {
+    "fecha": "2004-11-28",
+    "percentil": 83.41,
+    "puesto": 1425,
+    "de_dias": 8583,
+    "p_3d_mm": 0.46,
+    "p_7d_mm": 0.57
+  },
+  {
+    "fecha": "2005-03-31",
+    "percentil": 90.1,
+    "puesto": 851,
+    "de_dias": 8583,
+    "p_3d_mm": 9.44,
+    "p_7d_mm": 12.34
+  },
+  {
+    "fecha": "2007-01-09",
+    "percentil": 86.93,
+    "puesto": 1123,
+    "de_dias": 8583,
+    "p_3d_mm": 8.85,
+    "p_7d_mm": 16.84
+  },
+  {
+    "fecha": "2007-04-30",
+    "percentil": 94.77,
+    "puesto": 450,
+    "de_dias": 8583,
+    "p_3d_mm": 2.39,
+    "p_7d_mm": 2.39
+  },
+  {
+    "fecha": "2017-01-26",
+    "percentil": 39.33,
+    "puesto": 5208,
+    "de_dias": 8583,
+    "p_3d_mm": 2.77,
+    "p_7d_mm": 11.07
+  },
+  {
+    "fecha": "2017-03-16",
+    "percentil": 90.08,
+    "puesto": 852,
+    "de_dias": 8583,
+    "p_3d_mm": 9.2,
+    "p_7d_mm": 16.29
+  },
+  {
+    "fecha": "2018-05-20",
+    "percentil": 68.01,
+    "puesto": 2746,
+    "de_dias": 8583,
+    "p_3d_mm": 0.04,
+    "p_7d_mm": 0.04
+  },
+  {
+    "fecha": "2023-10-28",
+    "percentil": 66.52,
+    "puesto": 2874,
+    "de_dias": 8583,
+    "p_3d_mm": 6.11,
+    "p_7d_mm": 6.17
+  }
+]

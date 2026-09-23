@@ -1,0 +1,621 @@
+<title>VIGÍA Chillón · TRL 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#EBEEEF; --surface:#FFFFFF; --surface-2:#F4F6F6; --line:#D2DADD; --line-soft:#E2E8EA;
+  --ink:#10212A; --ink-2:#3C5561; --ink-3:#6B838E;
+  --accent:#0E7C86; --accent-soft:#D9EBEC; --accent-ink:#0A5C64;
+  --r1:#5B8C6E; --r2:#C9971F; --r3:#D2702A; --r4:#AE3833;
+  --r1-bg:#5B8C6E; --r2-bg:#C9971F; --r3-bg:#D2702A; --r4-bg:#AE3833;
+  --demo:#7A4FB5; --demo-soft:#EDE4F8;
+  --shadow:0 1px 2px rgba(16,33,42,.06),0 8px 24px -16px rgba(16,33,42,.28);
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  --display:"Archivo","IBM Plex Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --ground:#0C181D; --surface:#132630; --surface-2:#0F1F27; --line:#27414C; --line-soft:#1D343E;
+  --ink:#E4EDF0; --ink-2:#A8BFC8; --ink-3:#7A949F;
+  --accent:#4FB3B8; --accent-soft:#12343A; --accent-ink:#8FD4D6;
+  --r1:#6FA783; --r2:#DDAE36; --r3:#E5884A; --r4:#D0584F;
+  --demo:#B694E8; --demo-soft:#251C37;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0C181D; --surface:#132630; --surface-2:#0F1F27; --line:#27414C; --line-soft:#1D343E;
+  --ink:#E4EDF0; --ink-2:#A8BFC8; --ink-3:#7A949F;
+  --accent:#4FB3B8; --accent-soft:#12343A; --accent-ink:#8FD4D6;
+  --r1:#6FA783; --r2:#DDAE36; --r3:#E5884A; --r4:#D0584F;
+  --demo:#B694E8; --demo-soft:#251C37;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:16px;padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--display);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+
+/* ---------- header ---------- */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--ground) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hbar{max-width:1280px;margin:0 auto;padding:12px 16px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto}
+.brand h1{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.brand .sub{font-size:11.5px;color:var(--ink-3);font-family:var(--display);font-weight:500}
+.tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--demo);color:var(--demo);background:var(--demo-soft);
+  font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:4px 9px;border-radius:3px;white-space:nowrap}
+.scen{display:flex;gap:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.scen button{appearance:none;border:0;border-right:1px solid var(--line);background:transparent;color:var(--ink-2);
+  font-family:var(--display);font-weight:600;font-size:12px;padding:8px 13px;cursor:pointer;display:flex;flex-direction:column;gap:1px;align-items:flex-start;line-height:1.25}
+.scen button:last-child{border-right:0}
+.scen button small{font-family:var(--mono);font-size:10px;font-weight:400;color:var(--ink-3)}
+.scen button:hover{background:var(--surface-2)}
+.scen button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.scen button[aria-pressed="true"] small{color:rgba(255,255,255,.82)}
+.scen button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+/* ---------- banner ---------- */
+.banner{display:flex;gap:10px;align-items:flex-start;background:var(--demo-soft);border:1px solid color-mix(in srgb,var(--demo) 40%,transparent);
+  border-radius:8px;padding:11px 14px;margin-top:16px;font-size:12.5px;color:var(--ink-2)}
+.banner b{color:var(--ink)}
+.banner svg{flex:none;margin-top:1px;color:var(--demo)}
+
+/* ---------- status strip ---------- */
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line-soft);
+  border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:16px}
+.stat{background:var(--surface);padding:12px 14px}
+.stat .k{font-family:var(--display);font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.stat .v{font-family:var(--mono);font-size:21px;font-weight:600;letter-spacing:-.02em;margin-top:3px;display:flex;align-items:baseline;gap:5px}
+.stat .v span{font-size:11px;font-weight:400;color:var(--ink-3)}
+.stat .n{font-size:11.5px;color:var(--ink-3);margin-top:2px}
+
+/* ---------- layout ---------- */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 352px;gap:16px;margin-top:16px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow)}
+.card>.head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line-soft)}
+.card>.head h2{font-size:14px;font-weight:600}
+.card>.head .hint{font-size:11.5px;color:var(--ink-3)}
+.card>.body{padding:14px 16px}
+.rail{display:flex;flex-direction:column;gap:16px}
+
+/* ---------- map ---------- */
+.mapzone{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;padding:14px 16px 16px}
+.mapbox{display:flex;flex-direction:column;gap:10px;min-width:0}
+svg.map{width:100%;max-width:300px;height:auto;display:block}
+.map rect.cell{stroke:var(--surface);stroke-width:.5;cursor:pointer}
+.map rect.cell:hover{stroke:var(--ink);stroke-width:1.4}
+.map rect.cell[data-sel="1"]{stroke:var(--ink);stroke-width:1.8}
+.layers{display:flex;gap:5px;flex-wrap:wrap}
+.layers button{appearance:none;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);border-radius:99px;
+  font-family:var(--display);font-size:11px;font-weight:600;padding:4px 10px;cursor:pointer}
+.layers button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.layers button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.legend{display:flex;flex-direction:column;gap:5px;font-size:11.5px;color:var(--ink-2)}
+.legend .row{display:flex;align-items:center;gap:7px}
+.sw{width:13px;height:13px;border-radius:2.5px;flex:none}
+.detail h3{font-size:13px;font-weight:600;margin-bottom:2px}
+.detail .sid{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-bottom:10px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:5px 12px;font-size:12.5px;border-top:1px solid var(--line-soft);padding-top:9px;margin-top:9px}
+.kv dt{color:var(--ink-3)}
+.kv dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:3px 10px;font-family:var(--display);font-size:11px;font-weight:700;color:#fff;letter-spacing:.02em}
+.factors{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.factor{display:grid;grid-template-columns:96px minmax(0,1fr) 34px;gap:8px;align-items:center;font-size:11.5px;color:var(--ink-2)}
+.bar{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:3px}
+.factor .pct{font-family:var(--mono);font-size:11px;text-align:right;color:var(--ink-3)}
+
+/* ---------- lists ---------- */
+.pts{display:flex;flex-direction:column}
+.pt{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line-soft)}
+.pt:last-child{border-bottom:0}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+.pt .nm{font-size:12.5px;font-weight:500;line-height:1.3}
+.pt .mt{font-size:11px;color:var(--ink-3);font-family:var(--mono)}
+.pt .st{font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+
+.feed{display:flex;flex-direction:column;gap:0}
+.rep{display:grid;grid-template-columns:auto minmax(0,1fr);gap:11px;padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.rep:last-child{border-bottom:0}
+.ico{width:30px;height:30px;border-radius:7px;background:var(--surface-2);border:1px solid var(--line-soft);display:grid;place-items:center;font-size:14px;flex:none}
+.rep .t{font-size:12.5px;font-weight:500}
+.rep .m{font-size:11.5px;color:var(--ink-3);margin-top:1px}
+.rep .m .mono{font-family:var(--mono)}
+.chip{display:inline-block;font-family:var(--display);font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:2px 7px;border-radius:99px;border:1px solid;margin-top:5px}
+.chip.ok{color:var(--r1);border-color:color-mix(in srgb,var(--r1) 45%,transparent);background:color-mix(in srgb,var(--r1) 12%,transparent)}
+.chip.wait{color:var(--r2);border-color:color-mix(in srgb,var(--r2) 45%,transparent);background:color-mix(in srgb,var(--r2) 12%,transparent)}
+.chip.act{color:var(--accent-ink);border-color:color-mix(in srgb,var(--accent) 45%,transparent);background:var(--accent-soft)}
+
+/* ---------- table ---------- */
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:520px}
+th{font-family:var(--display);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);
+  text-align:left;padding:0 10px 7px;border-bottom:1px solid var(--line)}
+td{padding:8px 10px;border-bottom:1px solid var(--line-soft)}
+tbody tr:last-child td{border-bottom:0}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+th.n{text-align:right}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--surface-2)}
+
+/* ---------- bitacora ---------- */
+.bit{display:grid;grid-template-columns:minmax(96px,auto) repeat(7,minmax(0,1fr));gap:4px;align-items:center;font-size:11.5px;min-width:440px}
+.bit .lbl{color:var(--ink-2);font-size:11.5px;padding-right:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bit .hd{font-family:var(--mono);font-size:10px;color:var(--ink-3);text-align:center}
+.cellmark{height:22px;border-radius:4px;display:grid;place-items:center;font-family:var(--mono);font-size:10px;font-weight:600;color:#fff}
+.cellmark.neg{background:color-mix(in srgb,var(--r1) 82%,transparent)}
+.cellmark.pos{background:var(--r4)}
+.cellmark.alt{background:var(--r3)}
+.cellmark.none{background:var(--surface-2);border:1px dashed var(--line);color:var(--ink-3)}
+
+/* ---------- loop ---------- */
+.loop{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.lbox{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:8px;padding:11px 13px}
+.lbox .k{font-family:var(--display);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.lbox .v{font-family:var(--mono);font-size:22px;font-weight:600;margin-top:3px}
+.lbox .d{font-size:11px;color:var(--ink-3)}
+.metrics{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.met{border:1px solid var(--line-soft);border-radius:8px;padding:11px 13px;background:var(--surface)}
+.met .k{font-size:11.5px;color:var(--ink-3)}
+.met .row{display:flex;align-items:baseline;gap:9px;margin-top:5px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.met .v1{font-size:17px;color:var(--ink-3);text-decoration:line-through;text-decoration-thickness:1px}
+.met .v2{font-size:22px;font-weight:600;color:var(--accent-ink)}
+.met .arrow{color:var(--ink-3);font-size:13px}
+.met[data-state="pre"] .v1{text-decoration:none;color:var(--ink)}
+.met[data-state="pre"] .v2,.met[data-state="pre"] .arrow{display:none}
+.btn{appearance:none;border:1px solid var(--accent);background:var(--accent);color:#fff;font-family:var(--display);font-weight:600;font-size:12.5px;
+  padding:8px 15px;border-radius:7px;cursor:pointer}
+.btn:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:transparent;color:var(--accent-ink);border-color:var(--line)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.flowline{display:flex;flex-wrap:wrap;align-items:center;gap:7px;font-family:var(--display);font-size:11px;font-weight:600;color:var(--ink-2);margin-bottom:12px}
+.flowline span{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:99px;padding:4px 10px}
+.flowline span.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
+.flowline em{color:var(--ink-3);font-style:normal}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:16px;margin-top:16px}
+footer{margin-top:28px;border-top:1px solid var(--line);padding-top:16px;font-size:11.5px;color:var(--ink-3)}
+footer p{margin:0 0 7px}
+footer b{color:var(--ink-2)}
+.srcs{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.srcs code{font-family:var(--mono);font-size:10.5px;background:var(--surface-2);border:1px solid var(--line-soft);border-radius:4px;padding:2px 7px;color:var(--ink-2)}
+@media (max-width:960px){
+  .cols{grid-template-columns:minmax(0,1fr)}
+  .mapzone{grid-template-columns:minmax(0,1fr)}
+  svg.map{max-width:260px;margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.apirow{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:3px 0;border-bottom:1px solid var(--line-soft);font-family:var(--mono)}
+.apirow code{color:var(--ink-2)}.apirow .ok{color:var(--r1);font-weight:600}
+.apirow .ms{color:var(--ink-3)}
+</style>
+
+<header>
+  <div class="hbar">
+    <div class="brand">
+      <h1>VIGÍA Chillón</h1>
+      <span class="sub">Puente Piedra · malla 500 m</span>
+    </div>
+    <span class="tag" style="border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)">
+      Prototipo TRL 4 · datos servidos por la API
+    </span>
+    <div class="scen" role="group" aria-label="Fecha de consulta"><button type="button" data-f="2023-03-11" aria-pressed="true">Ciclón Yaku<small>11 mar 2023</small></button><button type="button" data-f="2017-03-16" aria-pressed="false">Niño Costero<small>16 mar 2017</small></button><button type="button" data-f="2015-08-03" aria-pressed="false">Día seco<small>3 ago 2015</small></button></div><label style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2)"><span style="font-family:var(--display);font-weight:600">o cualquier fecha</span><input type="date" id="fecha-input" value="2023-03-11" min="2003-01-31" max="2026-07-31" style="font-family:var(--mono);font-size:12px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)"></label></div></header>
+
+<div class="wrap">
+
+  <div class="banner" style="background:var(--accent-soft);border-color:var(--accent)"><div><b>Prototipo de acreditación TRL 4.</b> Esta página no contiene datos del distrito: los pide a la API en cada consulta. El riesgo de la fecha seleccionada se calcula en el servidor con la lluvia CHIRPS realmente observada ese día y los 22 predictores de cada celda. Elija cualquier fecha entre 2003 y 2026 para comprobarlo. Los reportes ciudadanos y las bitácoras de vigías siguen siendo simulados, porque el trabajo de campo aún no existe: son el objeto del proyecto.</div></div><p id="aviso" hidden style="margin:12px 0 0;padding:11px 14px;border-radius:8px;background:#fdecea;border:1px solid var(--r4);color:var(--r4);font-size:12.5px"></p>
+
+  <div class="strip">
+    <div class="stat">
+      <div class="k">Escenario</div>
+      <div class="v" id="s-fecha">11/03/2023</div>
+      <div class="n" id="s-nombre">Ciclón Yaku · lluvias intensas</div>
+    </div>
+    <div class="stat"><div class="k">Lluvia acumulada 3 d</div><div class="v"><span id="s-p3">—</span> <span>mm</span></div><div class="n">CHIRPS cuenca · <span id="s-p7">—</span> mm en 7 d</div></div><div class="stat"><div class="k">Probabilidad del modelo</div><div class="v"><span id="s-prob">—</span></div><div class="n">PU distrital · clase <span id="s-clase">—</span></div></div><div class="stat"><div class="k">Cálculo en servidor</div><div class="v"><span id="s-ms">—</span> <span>ms</span></div><div class="n">API <span id="api-estado">—</span> · origen <span id="api-origen">—</span></div></div><div class="stat"><div class="k">Celdas en alto / muy alto</div>
+      <div class="v" id="s-celdas">0</div>
+      <div class="n"><span id="s-pob">0</span> personas en esas celdas</div>
+    </div>
+  </div>
+
+  <div class="cols" id="sec-mapa">
+    <section class="card">
+      <div class="head">
+        <h2>Mapa de riesgo por celda</h2>
+        <span class="hint">260 celdas · clic para ver el detalle</span>
+      </div>
+      <div class="mapzone">
+        <div class="mapbox">
+          <div class="layers" role="group" aria-label="Capa del mapa">
+            <button type="button" id="ly-riesgo" data-ly="riesgo" aria-pressed="true">Riesgo del día</button>
+            <button type="button" id="ly-susc" data-ly="susc" aria-pressed="false">Susceptibilidad</button>
+            <button type="button" id="ly-expo" data-ly="expo" aria-pressed="false">Exposición</button>
+          </div>
+          <svg class="map" id="map" role="img" aria-label="Mapa de las 260 celdas de 500 metros del distrito de Puente Piedra, coloreadas por nivel de riesgo"></svg>
+          <div class="legend" id="legend"></div>
+        </div>
+        <div class="detail" id="detail"></div>
+      </div>
+    </section>
+
+    <div class="rail">
+      <section class="card">
+        <div class="head"><h2>Estado del distrito</h2></div>
+        <div class="body">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span class="pill" id="d-clase" style="background:var(--r3)">Alto</span>
+            <span class="num" id="d-prob" style="font-size:26px;font-weight:600">0.78</span>
+            <span style="font-size:11.5px;color:var(--ink-3);max-width:130px">índice demostrativo, horizonte 3 días</span>
+          </div>
+          <div class="factors" id="d-factors"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><h2>Puntos críticos</h2><span class="hint">8 · PREDES 2022</span></div>
+        <div class="body"><div class="pts" id="puntos"></div></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="grid2" id="sec-datos">
+    <section class="card">
+      <div class="head"><h2>Lluvia de cuenca, 14 días previos</h2><span class="hint">CHIRPS · datos reales</span></div>
+      <div class="body"><svg id="chart" role="img" aria-label="Gráfico de barras de precipitación diaria de los 14 días previos al escenario" style="width:100%;height:auto;display:block"></svg></div>
+    </section>
+
+    <section class="card">
+      <div class="head"><h2>Celdas priorizadas hoy</h2><span class="hint">ordenadas por índice</span></div>
+      <div class="body" style="padding-top:8px">
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Celda</th><th>Sector aproximado</th><th class="n">Índice</th><th class="n">Dist. río</th><th class="n">Pobl.</th><th>Clase</th></tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="grid2" id="sec-campo">
+    <section class="card">
+      <div class="head"><h2>Reportes ciudadanos</h2><span class="hint" id="rep-count">simulados</span></div>
+      <div class="body"><div class="feed" id="feed"></div></div>
+    </section>
+
+    <section class="card">
+      <div class="head"><h2>Bitácora de vigías</h2><span class="hint">7 días · 8 puntos</span></div>
+      <div class="body">
+        <div class="tablewrap"><div class="bit" id="bit"></div></div>
+        <div class="legend" style="margin-top:12px;flex-direction:row;flex-wrap:wrap;gap:12px">
+          <div class="row"><span class="sw" style="background:color-mix(in srgb,var(--r1) 82%,transparent)"></span> Sin novedad → negativo verificado</div>
+          <div class="row"><span class="sw" style="background:var(--r3)"></span> Nivel alto</div>
+          <div class="row"><span class="sw" style="background:var(--r4)"></span> Desborde → positivo</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="card" id="sec-loop" style="margin-top:16px"><div class="head"><h2>Modelo y trazabilidad</h2><span class="hint">servido por <code>GET /api/modelo</code></span></div><div class="body"><div class="loop" id="modelo-info"></div><h3 style="font-size:12.5px;margin:16px 0 6px">Limitaciones declaradas</h3><ul id="modelo-limites" style="margin:0;padding-left:18px;font-size:12px;color:var(--ink-2)"></ul><h3 style="font-size:12.5px;margin:16px 0 6px">Últimas llamadas a la API</h3><div id="api-log" style="font-size:11.5px"></div><p style="font-size:11.5px;color:var(--ink-3);margin-top:12px">Documentación interactiva del servicio en <a href="/docs" style="color:var(--accent-ink)">/docs</a>.</p></div></section>
+
+  <footer>
+    <p><b>Fuentes reales usadas en esta maqueta.</b> Malla de 260 celdas de 500 m (SDOT-PCM / INEI 2023, EPSG:32718) con centroides propios; predictores por celda: DEM y pendiente (Terrain Tiles), distancia al río, drenaje y canales (MINAM; la traza del Chillón se deriva de la distancia al río por celda, que confirma que el cauce corre por el límite sureste del distrito), instituciones educativas y establecimientos de salud (CENEPRED, escenario FEN 2023), población modelada (WorldPop 2017), superficie construida (GHSL 2020); puntos críticos con coordenadas de PREDES 2022; precipitación diaria de cuenca CHIRPS 2003–2026.</p>
+    <p><b>Elementos simulados.</b> Caudal, aviso SENAMHI del día, reportes ciudadanos, bitácoras de vigías y métricas de desempeño. El índice de riesgo combina susceptibilidad territorial e intensidad de lluvia mediante reglas explícitas; no es un modelo entrenado ni sustituye los avisos oficiales de SENAMHI, INDECI, CENEPRED o ANA.</p>
+    <div class="srcs"><code>CHIRPS v3</code><code>GeoSINPAD</code><code>CENEPRED SIGRID</code><code>PREDES 2022</code><code>SDOT-PCM 2023</code><code>WorldPop</code><code>GHSL</code><code>NOAA CPC</code></div>
+  </footer>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   Capa de datos: todo procede de la API. La página no incrusta ningún
+   dato del distrito; si la API no responde, no hay tablero.
+   ------------------------------------------------------------------ */
+const API = (location.origin.startsWith("http") ? location.origin : "http://127.0.0.1:8000");
+let CELDAS = [], PUNTOS = [], RIO = [], MALLA = {}, RIESGO = null, FICHA = {};
+let fechaActual = "2023-03-11", capa = "riesgo", sel = null, retrained = false;
+
+const PRESETS = [
+  { f: "2023-03-11", nom: "Ciclón Yaku", sub: "11 mar 2023" },
+  { f: "2017-03-16", nom: "Niño Costero", sub: "16 mar 2017" },
+  { f: "2015-08-03", nom: "Día seco", sub: "3 ago 2015" },
+];
+const CLASES = [
+  { n: "Bajo", v: "--r1" }, { n: "Medio", v: "--r2" },
+  { n: "Alto", v: "--r3" }, { n: "Muy alto", v: "--r4" },
+];
+const colorClase = n => (CLASES.find(c => c.n === n) || CLASES[0]).v;
+const cssv = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const fmt = n => (n == null ? "—" : Number(n).toLocaleString("es-PE"));
+
+async function pedir(ruta) {
+  const t0 = performance.now();
+  const r = await fetch(API + ruta, { headers: { "Accept": "application/json" } });
+  const ms = performance.now() - t0;
+  if (!r.ok) {
+    let detalle = r.statusText;
+    try { detalle = (await r.json()).detail || detalle; } catch (e) {}
+    throw new Error(`${r.status} · ${detalle}`);
+  }
+  const j = await r.json();
+  registrarLlamada(ruta, r.status, ms);
+  return j;
+}
+
+const llamadas = [];
+function registrarLlamada(ruta, estado, ms) {
+  llamadas.unshift({ ruta, estado, ms: Math.round(ms), hora: new Date().toLocaleTimeString("es-PE") });
+  llamadas.splice(8);
+  const el = document.getElementById("api-log");
+  if (el) el.innerHTML = llamadas.map(l =>
+    `<div class="apirow"><code>${l.ruta}</code><span class="ok">${l.estado}</span><span class="ms">${l.ms} ms</span></div>`).join("");
+}
+
+/* nombre de sector: junto al cauce, el punto crítico más cercano */
+function sectorDe(c) {
+  if (c.dist_rio_m != null && c.dist_rio_m < 1300 && PUNTOS.length) {
+    let mejor = null, d0 = Infinity;
+    for (const p of PUNTOS) {
+      const dx = (p.lon - c.lon) * Math.cos(c.lat * Math.PI / 180), dy = p.lat - c.lat;
+      const d = Math.hypot(dx, dy);
+      if (d < d0) { d0 = d; mejor = p; }
+    }
+    if (mejor) return mejor.nombre;
+  }
+  if (c.fila >= 27) return "Las Lomas";
+  if (c.fila >= 20) return "Zapallal";
+  if (c.fila >= 13) return "Puente Piedra centro";
+  return "Laderas de Chillón";
+}
+
+const riesgoDe = id => (RIESGO && RIESGO.mapa[id]) || { indice: 0, clase: "Bajo" };
+function valorCapa(c) {
+  if (capa === "susc") return c.susceptibilidad;
+  if (capa === "expo") return c.exposicion;
+  return riesgoDe(c.spatial_id).indice;
+}
+
+/* ---------------- mapa ---------------- */
+const S = 10, PADM = 3;
+const mapEl = document.getElementById("map");
+const gx = c => PADM + c.columna * S;
+const gy = c => PADM + (MALLA.fila_max - c.fila) * S;
+
+function drawMap() {
+  const W = (MALLA.columna_max + 1) * S + PADM * 2, H = (MALLA.fila_max + 1) * S + PADM * 2;
+  function fit(xs, ys) {
+    const n = xs.length, sx = xs.reduce((a, b) => a + b, 0), sy = ys.reduce((a, b) => a + b, 0);
+    const sxy = xs.reduce((a, b, i) => a + b * ys[i], 0), sxx = xs.reduce((a, b) => a + b * b, 0);
+    const m = (n * sxy - sx * sy) / (n * sxx - sx * sx);
+    return [m, (sy - m * sx) / n];
+  }
+  const [mx, bx] = fit(CELDAS.map(c => c.lon), CELDAS.map(c => gx(c) + S / 2));
+  const [my, by] = fit(CELDAS.map(c => c.lat), CELDAS.map(c => gy(c) + S / 2));
+  const px = lon => mx * lon + bx, py = lat => my * lat + by;
+
+  const cells = CELDAS.map(c => {
+    const v = valorCapa(c);
+    const col = capa === "riesgo" ? cssv(colorClase(riesgoDe(c.spatial_id).clase)) : cssv("--accent");
+    const op = capa === "riesgo" ? 1 : (0.12 + 0.88 * v);
+    return `<rect class="cell" data-id="${c.spatial_id}" x="${gx(c)}" y="${gy(c)}" width="${S}" height="${S}" fill="${col}" fill-opacity="${op.toFixed(2)}"><title>${c.spatial_id} · ${sectorDe(c)}</title></rect>`;
+  }).join("");
+  const river = RIO.map(p => `${p[0]},${p[1]}`).join(" ");
+  const marks = PUNTOS.map(p => {
+    const x = px(p.lon).toFixed(1), y = py(p.lat).toFixed(1);
+    return `<g><circle cx="${x}" cy="${y}" r="3.4" fill="none" stroke="${cssv('--ink')}" stroke-width="1.5"/><circle cx="${x}" cy="${y}" r="1.3" fill="${cssv('--ink')}"/><title>${p.nombre}</title></g>`;
+  }).join("");
+  mapEl.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  mapEl.innerHTML = `${cells}
+    <polyline points="${river}" fill="none" stroke="${cssv('--accent')}" stroke-width="2.2" stroke-opacity=".85" stroke-linecap="round" stroke-linejoin="round"/>
+    ${marks}
+    <text x="${W - 4}" y="12" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="7" fill="${cssv('--ink-3')}">N ↑</text>`;
+  if (sel) { const r = mapEl.querySelector(`[data-id="${sel}"]`); if (r) r.setAttribute("data-sel", "1"); }
+  drawLegend();
+}
+
+function drawLegend() {
+  const el = document.getElementById("legend");
+  if (capa === "riesgo") {
+    el.innerHTML = CLASES.map(c => `<div class="row"><span class="sw" style="background:var(${c.v})"></span>${c.n}</div>`).join("")
+      + `<div class="row" style="margin-top:3px"><span class="sw" style="background:var(--accent);border-radius:99px;height:3px"></span>Río Chillón · borde SE del distrito</div>`
+      + `<div class="row"><span class="sw" style="border:1.5px solid var(--ink);background:transparent;border-radius:50%"></span>Punto crítico PREDES</div>`;
+  } else {
+    const t = capa === "susc" ? "Susceptibilidad territorial (fija)" : "Exposición: población, área construida y servicios";
+    el.innerHTML = `<div class="row"><span class="sw" style="background:var(--accent);opacity:.15"></span>Menor</div>
+      <div class="row"><span class="sw" style="background:var(--accent)"></span>Mayor</div>
+      <div class="row" style="color:var(--ink-3)">${t}</div>`;
+  }
+}
+
+/* ---------------- ficha de celda ---------------- */
+async function pintaDetalle(id) {
+  const el = document.getElementById("detail");
+  if (!id) { el.innerHTML = `<h3>Detalle de celda</h3><div class="sid">Selecciona una celda del mapa</div>`; return; }
+  const c = CELDAS.find(x => x.spatial_id === id);
+  if (!c) return;
+  el.innerHTML = `<h3>${sectorDe(c)}</h3><div class="sid">${c.spatial_id} · consultando la API…</div>`;
+  let d;
+  try { d = await pedir(`/api/celda/${id}?fecha=${fechaActual}`); }
+  catch (e) { el.innerHTML = `<h3>${sectorDe(c)}</h3><div class="sid">${e.message}</div>`; return; }
+  const r = d.riesgo, f = d.factores;
+  const nombres = { cercania_al_rio: "Cercanía al río", terreno_plano: "Terreno plano", cota_baja: "Cota baja",
+                    drenaje: "Drenaje", canales: "Canales", intensidad_climatica: "Intensidad de lluvia" };
+  el.innerHTML = `<h3>${sectorDe(c)}</h3><div class="sid">${c.spatial_id}</div>
+    <span class="pill" style="background:var(${colorClase(r.clase)})">${r.clase} · ${r.indice.toFixed(2)}</span>
+    <dl class="kv">
+      <dt>Distancia al río</dt><dd>${fmt(Math.round(c.dist_rio_m))} m</dd>
+      <dt>Elevación media</dt><dd>${c.elev_media_m?.toFixed(1)} m</dd>
+      <dt>Pendiente media</dt><dd>${c.pendiente_grados?.toFixed(2)}°</dd>
+      <dt>Drenaje en celda</dt><dd>${fmt(Math.round(c.drenaje_m || 0))} m</dd>
+      <dt>Canales</dt><dd>${c.canales_n ?? 0}</dd>
+      <dt>Población (WorldPop)</dt><dd>${fmt(Math.round(c.poblacion || 0))}</dd>
+      <dt>IE / salud</dt><dd>${c.ie_n ?? 0} / ${c.salud_n ?? 0}</dd>
+      <dt>Punto crítico PREDES</dt><dd>${(c.predes_n || 0) > 0 ? "sí" : "—"}</dd>
+    </dl>
+    <div class="factors">${Object.entries(f).map(([k, v]) =>
+      `<div class="factor"><span>${nombres[k] || k}</span><span class="bar"><i style="width:${(v * 100).toFixed(0)}%"></i></span><span class="pct">${(v * 100).toFixed(0)}</span></div>`).join("")}</div>
+    <p style="font-size:11px;color:var(--ink-3);margin:11px 0 0">Valores servidos por <code>GET /api/celda/${id}?fecha=${fechaActual}</code>.</p>`;
+}
+
+/* ---------------- paneles ---------------- */
+function pintaStrip() {
+  const p = RIESGO.precipitacion, d = RIESGO.distrital, r = RIESGO.resumen;
+  const [a, m, dd] = RIESGO.fecha.split("-");
+  document.getElementById("s-fecha").textContent = `${dd}/${m}/${a}`;
+  const ev = RIESGO.evento_registrado;
+  document.getElementById("s-nombre").textContent = ev
+    ? `Evento registrado: ${ev.fenomeno}` : "Sin evento registrado en SINPAD para esta fecha";
+  document.getElementById("s-p3").textContent = (p.p_3d ?? 0).toFixed(2);
+  document.getElementById("s-p7").textContent = (p.p_7d ?? 0).toFixed(2);
+  document.getElementById("s-prob").textContent = d.probabilidad_modelo.toFixed(3);
+  document.getElementById("s-clase").textContent = d.clase;
+  document.getElementById("s-celdas").textContent = r.celdas_alto_o_muy_alto;
+  document.getElementById("s-pob").textContent = fmt(r.poblacion_en_esas_celdas);
+  document.getElementById("s-ms").textContent = RIESGO.calculo_ms;
+}
+
+function pintaResumen() {
+  const d = RIESGO.distrital, p = RIESGO.precipitacion;
+  document.getElementById("d-clase").textContent = d.clase;
+  document.getElementById("d-clase").style.background = `var(${colorClase(d.clase)})`;
+  document.getElementById("d-prob").textContent = d.probabilidad_modelo.toFixed(2);
+  const fx = [
+    ["Lluvia 3 días", Math.min(1, (p.p_3d || 0) / 20)],
+    ["Lluvia 7 días", Math.min(1, (p.p_7d || 0) / 40)],
+    ["Lluvia 30 días", Math.min(1, (p.p_30d || 0) / 90)],
+    ["Probabilidad del modelo", d.probabilidad_modelo],
+  ];
+  document.getElementById("d-factors").innerHTML = fx.map(([k, v]) =>
+    `<div class="factor"><span>${k}</span><span class="bar"><i style="width:${(v * 100).toFixed(0)}%"></i></span><span class="pct">${(v * 100).toFixed(0)}</span></div>`).join("");
+}
+
+function pintaPuntos() {
+  document.getElementById("puntos").innerHTML = PUNTOS.map(p => {
+    const cerca = CELDAS.map(c => ({ c, d: Math.hypot((p.lon - c.lon) * Math.cos(c.lat * Math.PI / 180), p.lat - c.lat) }))
+      .sort((a, b) => a.d - b.d)[0];
+    const r = riesgoDe(cerca.c.spatial_id);
+    return `<div class="pt"><span class="dot" style="background:var(${colorClase(r.clase)})"></span>
+      <span><span class="nm">${p.nombre}</span><br><span class="mt">${fmt(p.viviendas)} viv. · ${fmt(p.personas)} pers.</span></span>
+      <span class="st" style="color:var(${colorClase(r.clase)})">${r.clase}</span></div>`;
+  }).join("");
+}
+
+function pintaTabla() {
+  const filas = CELDAS.map(c => ({ c, r: riesgoDe(c.spatial_id) }))
+    .sort((a, b) => b.r.indice - a.r.indice).slice(0, 8);
+  document.getElementById("tbody").innerHTML = filas.map(({ c, r }) =>
+    `<tr data-id="${c.spatial_id}"><td class="num" style="font-size:11.5px">${c.spatial_id.replace("PP0500_", "")}</td>
+      <td>${sectorDe(c)}</td><td class="n">${r.indice.toFixed(2)}</td>
+      <td class="n">${fmt(Math.round(c.dist_rio_m))} m</td>
+      <td class="n">${fmt(Math.round(c.poblacion || 0))}</td>
+      <td><span class="pill" style="background:var(${colorClase(r.clase)});font-size:10px;padding:2px 8px">${r.clase}</span></td></tr>`).join("");
+  document.querySelectorAll("#tbody tr").forEach(tr => tr.addEventListener("click", () => selecciona(tr.dataset.id)));
+}
+
+async function pintaChart() {
+  const el = document.getElementById("chart");
+  let datos;
+  try { datos = await pedir(`/api/precipitacion?hasta=${fechaActual}&dias=14`); }
+  catch (e) { el.innerHTML = ""; return; }
+  const s = datos.serie.map(d => ({ d: d.fecha.slice(8) + "/" + d.fecha.slice(5, 7), mm: d.p_t0 || 0 }));
+  const w = 560, h = 190, ml = 34, mr = 8, mt = 12, mb = 26;
+  const max = Math.max(4, Math.ceil(Math.max(...s.map(d => d.mm))));
+  const iw = w - ml - mr, ih = h - mt - mb, bw = iw / s.length;
+  const y = v => mt + ih - (v / max) * ih;
+  const grid = [0, max / 2, max].map(t =>
+    `<line x1="${ml}" y1="${y(t).toFixed(1)}" x2="${w - mr}" y2="${y(t).toFixed(1)}" stroke="${cssv('--line-soft')}" stroke-width="1"/>
+     <text x="${ml - 6}" y="${(y(t) + 3.5).toFixed(1)}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="${cssv('--ink-3')}">${t % 1 ? t.toFixed(1) : t}</text>`).join("");
+  const bars = s.map((d, i) => {
+    const bh = Math.max(1, mt + ih - y(d.mm)), last = i === s.length - 1;
+    return `<rect x="${(ml + i * bw + bw * 0.18).toFixed(1)}" y="${y(d.mm).toFixed(1)}" width="${(bw * 0.64).toFixed(1)}" height="${bh.toFixed(1)}" rx="1.5" fill="${last ? cssv('--r3') : cssv('--accent')}" fill-opacity="${last ? 1 : .55}"><title>${d.d}: ${d.mm.toFixed(2)} mm</title></rect>`;
+  }).join("");
+  const labs = s.map((d, i) => (i % 2 === 0 || i === s.length - 1)
+    ? `<text x="${(ml + i * bw + bw / 2).toFixed(1)}" y="${h - 9}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="${cssv('--ink-3')}">${d.d}</text>` : "").join("");
+  el.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  el.innerHTML = `${grid}${bars}${labs}<text x="${ml}" y="${mt - 3}" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="${cssv('--ink-3')}">mm/día · CHIRPS · GET /api/precipitacion</text>`;
+}
+
+function pintaModelo() {
+  const m = FICHA.metricas || {};
+  const el = document.getElementById("modelo-info");
+  if (!el) return;
+  el.innerHTML = `
+    <div class="lbox"><div class="k">Versión</div><div class="v num" style="font-size:15px">${FICHA.version || "—"}</div><div class="d">${FICHA.unidad || ""}</div></div>
+    <div class="lbox"><div class="k">Positivos</div><div class="v num">${FICHA.positivos ?? "—"}</div><div class="d">${fmt(FICHA.no_etiquetados)} días no etiquetados</div></div>
+    <div class="lbox"><div class="k">Negativos verificados</div><div class="v num">0</div><div class="d">la bitácora de vigías los producirá</div></div>
+    <div class="lbox"><div class="k">Percentil mediano (LOO)</div><div class="v num">${m.percentil_mediano ?? "—"}</div><div class="d">línea base lluvia 3 d: ${m.lineas_base?.p_3d?.percentil_mediano ?? "—"}</div></div>`;
+  const lim = document.getElementById("modelo-limites");
+  if (lim && FICHA.limitaciones) lim.innerHTML = FICHA.limitaciones.map(t => `<li>${t}</li>`).join("");
+}
+
+/* ---------------- interacción ---------------- */
+function selecciona(id) {
+  sel = id;
+  mapEl.querySelectorAll("rect.cell").forEach(r => r.removeAttribute("data-sel"));
+  const r = mapEl.querySelector(`[data-id="${id}"]`);
+  if (r) r.setAttribute("data-sel", "1");
+  pintaDetalle(id);
+}
+mapEl.addEventListener("click", ev => { const t = ev.target.closest("rect.cell"); if (t) selecciona(t.dataset.id); });
+
+document.querySelectorAll(".layers button").forEach(b => b.addEventListener("click", () => {
+  capa = b.dataset.ly;
+  document.querySelectorAll(".layers button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  drawMap();
+}));
+
+async function irAFecha(f) {
+  const aviso = document.getElementById("aviso");
+  aviso.hidden = true;
+  document.body.style.cursor = "progress";
+  try {
+    RIESGO = await pedir(`/api/riesgo?fecha=${f}`);
+    RIESGO.mapa = Object.fromEntries(RIESGO.celdas.map(c => [c.spatial_id, c]));
+    fechaActual = f;
+    document.getElementById("fecha-input").value = f;
+    document.querySelectorAll(".scen button").forEach(b =>
+      b.setAttribute("aria-pressed", String(b.dataset.f === f)));
+    pintaStrip(); drawMap(); pintaResumen(); pintaPuntos(); pintaTabla();
+    await pintaChart();
+    await pintaDetalle(sel);
+  } catch (e) {
+    aviso.hidden = false;
+    aviso.textContent = `No se pudo consultar la API: ${e.message}`;
+  } finally {
+    document.body.style.cursor = "";
+  }
+}
+
+document.querySelectorAll(".scen button").forEach(b =>
+  b.addEventListener("click", () => irAFecha(b.dataset.f)));
+document.getElementById("fecha-input").addEventListener("change", ev => irAFecha(ev.target.value));
+
+/* ---------------- arranque ---------------- */
+(async function boot() {
+  const aviso = document.getElementById("aviso");
+  try {
+    const salud = await pedir("/api/salud");
+    document.getElementById("api-estado").textContent = salud.estado;
+    document.getElementById("api-origen").textContent = (salud.procedencia?.sha256_origen || "").slice(0, 12) + "…";
+    const [cel, pts, ficha] = await Promise.all([
+      pedir("/api/celdas"), pedir("/api/puntos-criticos"), pedir("/api/modelo"),
+    ]);
+    CELDAS = cel.celdas; RIO = cel.rio; MALLA = cel.malla; PUNTOS = pts.puntos; FICHA = ficha;
+    pintaModelo();
+    sel = "PP0500_R0011_C0014";
+    await irAFecha(fechaActual);
+  } catch (e) {
+    aviso.hidden = false;
+    aviso.textContent = `No se pudo iniciar: ${e.message}. Verifique que la API esté en ejecución.`;
+  }
+})();
+
+const mq = window.matchMedia("(prefers-color-scheme: dark)");
+mq.addEventListener?.("change", () => { drawMap(); pintaChart(); });
+new MutationObserver(() => { drawMap(); pintaChart(); })
+  .observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+</script>

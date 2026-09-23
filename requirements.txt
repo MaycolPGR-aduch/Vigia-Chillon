@@ -1,0 +1,10 @@
+# API
+fastapi==0.141.1
+uvicorn==0.53.0
+# datos y modelo
+pandas==2.2.3
+numpy==2.2.2
+scikit-learn==1.7.2
+joblib==1.5.3
+# solo para el pipeline de extracción (no es necesario en el despliegue)
+openpyxl==3.1.5

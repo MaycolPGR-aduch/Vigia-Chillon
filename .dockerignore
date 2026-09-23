@@ -1,0 +1,7 @@
+datos/crudos/
+__pycache__/
+*.pyc
+.pytest_cache/
+.git/
+tests/
+web/construir_web.py

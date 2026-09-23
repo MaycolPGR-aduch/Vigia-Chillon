@@ -1,0 +1,73 @@
+{
+  "ejecutado_utc": "2026-09-23T20:30:27+00:00",
+  "controles": [
+    {
+      "control": "La malla tiene 260 celdas",
+      "resultado": "PASA",
+      "detalle": "260 filas"
+    },
+    {
+      "control": "Identificadores únicos",
+      "resultado": "PASA",
+      "detalle": ""
+    },
+    {
+      "control": "Sin celdas sin coordenadas",
+      "resultado": "PASA",
+      "detalle": ""
+    },
+    {
+      "control": "Todas las celdas tienen elevación y pendiente",
+      "resultado": "PASA",
+      "detalle": ""
+    },
+    {
+      "control": "Distancia al río no negativa",
+      "resultado": "PASA",
+      "detalle": ""
+    },
+    {
+      "control": "Susceptibilidad en el rango [0,1]",
+      "resultado": "PASA",
+      "detalle": "min 0.000, max 1.000"
+    },
+    {
+      "control": "Serie diaria sin huecos",
+      "resultado": "PASA",
+      "detalle": "2003-01-01 a 2026-07-31, 8613 días"
+    },
+    {
+      "control": "Sin nulos en la lluvia del día",
+      "resultado": "PASA",
+      "detalle": ""
+    },
+    {
+      "control": "Acumulado de 3 días >= acumulado de 1 día",
+      "resultado": "PASA",
+      "detalle": "8610 filas comparables; 3 sin acumulado (inicio de serie)"
+    },
+    {
+      "control": "Todos los positivos caen dentro de la serie",
+      "resultado": "PASA",
+      "detalle": "8 positivos"
+    },
+    {
+      "control": "No se generan negativos",
+      "resultado": "PASA",
+      "detalle": "los días sin evento quedan NO ETIQUETADOS"
+    },
+    {
+      "control": "Puntos críticos con coordenadas",
+      "resultado": "PASA",
+      "detalle": "8 puntos"
+    },
+    {
+      "control": "Traza del río derivada de la hidrografía",
+      "resultado": "PASA",
+      "detalle": "16 vértices, filas 0–13"
+    }
+  ],
+  "fallos": 0,
+  "salida": "datos\\vigia.db",
+  "tamano_bytes": 958464
+}

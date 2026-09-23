@@ -1,0 +1,9 @@
+# Despliegue en Render (plan gratuito). Ver README, sección "Publicar en la nube".
+services:
+  - type: web
+    name: vigia-chillon
+    runtime: docker
+    plan: free
+    region: oregon
+    healthCheckPath: /api/salud
+    autoDeploy: true
