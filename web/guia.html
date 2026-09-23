@@ -149,9 +149,7 @@ footer{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-si
   <div class="hbar">
     <div class="brand"><h1>VIGÍA Chillón</h1><span class="sub">Puente Piedra · malla 500 m</span></div>
     <nav class="nav">
-      <a href="/">Tablero</a>
-      <a href="/guia" aria-current="page">Cómo funciona</a>
-      <a href="/docs">API</a>
+      <a href="/">Tablero</a><a href="/mapa">Mapa</a><a href="/guia" aria-current="page">Cómo funciona</a><a href="/docs">API</a>
     </nav>
   </div>
 </header>
@@ -566,6 +564,8 @@ footer{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-si
           <span class="d">Procedencia con SHA-256 del origen y políticas metodológicas</span></div>
         <div class="ep"><span class="m">GET</span><span class="r">/api/modelo</span><a href="/api/modelo" target="_blank" rel="noopener">abrir →</a>
           <span class="d">Ficha del modelo: métricas, limitaciones y usos previstos</span></div>
+        <div class="ep"><span class="m">GET</span><span class="r">/api/geojson?fecha=2023-03-11</span><a href="/api/geojson?fecha=2023-03-11" target="_blank" rel="noopener">abrir →</a>
+          <span class="d">Todo el territorio en GeoJSON estándar, listo para QGIS o ArcGIS</span></div>
         <div class="ep"><span class="m">GET</span><span class="r">/api/celdas</span><a href="/api/celdas" target="_blank" rel="noopener">abrir →</a>
           <span class="d">Las 260 celdas con todos sus predictores</span></div>
         <div class="ep"><span class="m">GET</span><span class="r">/api/campo-simulado?fecha=2023-03-11</span><a href="/api/campo-simulado?fecha=2023-03-11" target="_blank" rel="noopener">abrir →</a>

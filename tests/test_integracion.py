@@ -211,6 +211,52 @@ def test_guia_no_incrusta_cifras():
     assert "/api/salud" in html and "/api/modelo" in html
 
 
+def test_geojson_cumple_el_estandar():
+    j = cliente.get("/api/geojson", params={"fecha": "2023-03-11"}).json()
+    assert j["type"] == "FeatureCollection"
+    tipos = {}
+    for f in j["features"]:
+        assert f["type"] == "Feature" and "geometry" in f and "properties" in f
+        tipos[f["geometry"]["type"]] = tipos.get(f["geometry"]["type"], 0) + 1
+    assert tipos["Polygon"] == 260, "faltan celdas"
+    assert tipos["Point"] == 8, "faltan puntos críticos"
+    assert tipos["LineString"] == 1, "falta la traza del río"
+
+
+def test_geojson_incorpora_el_riesgo_solo_con_fecha():
+    con = cliente.get("/api/geojson", params={"fecha": "2023-03-11"}).json()
+    sin = cliente.get("/api/geojson").json()
+    celda_con = next(f for f in con["features"] if f["geometry"]["type"] == "Polygon")
+    celda_sin = next(f for f in sin["features"] if f["geometry"]["type"] == "Polygon")
+    assert "clase_riesgo" in celda_con["properties"]
+    assert "clase_riesgo" not in celda_sin["properties"]
+
+
+def test_rio_pasa_por_los_puntos_criticos():
+    """La traza debe coincidir con los puentes, que son estructuras sobre el cauce."""
+    j = cliente.get("/api/geojson").json()
+    rio = next(f for f in j["features"] if f["geometry"]["type"] == "LineString")
+    vertices = {(round(x, 6), round(y, 6)) for x, y in rio["geometry"]["coordinates"]}
+    puntos = [f for f in j["features"] if f["geometry"]["type"] == "Point"]
+    for p in puntos:
+        x, y = p["geometry"]["coordinates"]
+        assert (round(x, 6), round(y, 6)) in vertices, f"{p['properties']['nombre']} no está en la traza"
+
+
+def test_mapa_se_sirve_y_consume_la_api():
+    r = cliente.get("/mapa")
+    assert r.status_code == 200
+    assert "/api/geojson" in r.text, "el mapa debe pedir los datos a la API"
+    assert "leaflet" in r.text.lower()
+    assert 'name="viewport"' in r.text
+
+
+def test_navegacion_incluye_el_mapa():
+    for ruta in ("/", "/mapa", "/guia"):
+        html = cliente.get(ruta).text
+        assert 'href="/mapa"' in html, f"falta el enlace al mapa en {ruta}"
+
+
 def test_tablero_es_un_documento_html_completo():
     """Regresión: sin <meta viewport> los móviles renderizan a 980 px y recortan."""
     html = (RAIZ / "web" / "index.html").read_text(encoding="utf-8")

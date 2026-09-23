@@ -49,7 +49,8 @@ vigia-trl4/
 ├── api/main.py        servicio FastAPI; OpenAPI en /docs
 ├── web/index.html     tablero; no contiene datos del distrito, los pide a la API
 ├── web/guia.html      pestaña explicativa con los diagramas de arquitectura y de la base
-├── tests/             29 pruebas de integración
+├── web/mapa.html      mapa Leaflet sobre imagen satelital; consume /api/geojson
+├── tests/             35 pruebas de integración
 ├── informe/           log del pipeline e INFORME_PRUEBAS.md
 └── datos/vigia.db     base analítica (260 celdas, 8 613 días)
 ```
@@ -74,7 +75,8 @@ python informe/generar_informe.py
 uvicorn api.main:app --reload
 ```
 
-Tablero en <http://127.0.0.1:8000/> · guía explicativa en <http://127.0.0.1:8000/guia> ·
+Tablero en <http://127.0.0.1:8000/> · mapa en <http://127.0.0.1:8000/mapa> ·
+guía explicativa en <http://127.0.0.1:8000/guia> ·
 documentación de la API en <http://127.0.0.1:8000/docs>
 
 La pestaña **Cómo funciona** está pensada para quien revisa el proyecto: explica la
@@ -135,11 +137,13 @@ gcloud run deploy vigia-chillon --source . --region southamerica-west1 --allow-u
 | GET | `/api/precipitacion` | serie diaria CHIRPS de la cuenca del Chillón |
 | GET | `/api/riesgo?fecha=` | **índice y clase de las 260 celdas, calculado en la petición** |
 | GET | `/api/celda/{id}?fecha=` | detalle de una celda y descomposición de su índice en factores |
+| GET | `/api/geojson?fecha=` | celdas, puntos críticos y río en GeoJSON estándar (RFC 7946), con el riesgo de la fecha si se indica |
 | GET | `/api/campo-simulado?fecha=` | **SIMULADO**: reportes y bitácora del piloto previsto, generados de forma determinista a partir de la lluvia real |
 | GET | `/api/eventos` | los 8 positivos corroborados; declara que no hay negativos |
 | GET | `/api/modelo` | ficha del modelo: métricas, límites y usos previstos |
 | GET | `/docs` | documentación interactiva OpenAPI |
 | GET | `/guia` | página explicativa: arquitectura, modelo de datos, transparencia y hoja de ruta |
+| GET | `/mapa` | mapa interactivo sobre imagen satelital, alimentado por `/api/geojson` |
 
 ---
 

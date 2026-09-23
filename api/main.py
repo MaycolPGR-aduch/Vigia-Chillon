@@ -247,6 +247,106 @@ def eventos():
     }
 
 
+def _traza_rio(puntos: list, celdas: list) -> list:
+    """Traza del Chillón en coordenadas geográficas.
+
+    En el tramo de los puentes la línea pasa por los propios puntos críticos, que son
+    estructuras sobre el cauce. Aguas arriba se deriva de la distancia al cauce de la
+    celda más cercana de cada fila (hidrografía MINAM).
+    """
+    por_fila = {}
+    for c in celdas:
+        f, d = c["fila"], c["dist_rio_m"]
+        if d is not None and (f not in por_fila or d < por_fila[f]["dist_rio_m"]):
+            por_fila[f] = c
+    lat_norte = max(p["lat"] for p in puntos)
+    arriba = []
+    for f in sorted(por_fila, reverse=True):
+        c = por_fila[f]
+        if c["dist_rio_m"] >= 900 or c["lat"] <= lat_norte:
+            continue
+        dlon = c["dist_rio_m"] / (111320 * math.cos(math.radians(c["lat"])))
+        arriba.append([round(c["lon"] + dlon, 6), round(c["lat"], 6)])
+    puentes = [[round(p["lon"], 6), round(p["lat"], 6)]
+               for p in sorted(puntos, key=lambda q: -q["lat"])]
+    traza = arriba + puentes
+    if len(puentes) >= 2:  # prolongación aguas abajo, donde el río sale del distrito
+        (xa, ya), (xb, yb) = puentes[-1], puentes[-2]
+        traza.append([round(xa + (xa - xb) * 1.5, 6), round(ya + (ya - yb) * 1.5, 6)])
+    return traza
+
+
+@app.get("/api/geojson", tags=["territorio"],
+         summary="Celdas, puntos críticos y río en GeoJSON estándar (RFC 7946)")
+def geojson(fecha: Optional[str] = Query(None, description="AAAA-MM-DD; añade el riesgo de esa fecha a cada celda")):
+    """
+    Entrega la información territorial en GeoJSON, el formato que consumen QGIS, ArcGIS,
+    Leaflet y los visores del Estado. Si se indica una fecha, cada celda incorpora el
+    índice y la clase de riesgo calculados para ese día.
+    """
+    cx = conectar()
+    puntos = [dict(r) for r in cx.execute("SELECT * FROM puntos_criticos ORDER BY lat DESC")]
+    cx.close()
+    celdas_est = celdas_estaticas()
+
+    riesgo_por_celda = {}
+    if fecha:
+        riesgo_por_celda = {c["spatial_id"]: c for c in riesgo(fecha)["celdas"]}
+
+    DLAT = 250 / 110540  # media celda en latitud; la malla original está en EPSG:32718
+    features = []
+    for c in celdas_est:
+        dlon = 250 / (111320 * math.cos(math.radians(c["lat"])))
+        lon, lat = c["lon"], c["lat"]
+        anillo = [[lon - dlon, lat - DLAT], [lon + dlon, lat - DLAT], [lon + dlon, lat + DLAT],
+                  [lon - dlon, lat + DLAT], [lon - dlon, lat - DLAT]]
+        props = {
+            "spatial_id": c["spatial_id"],
+            "susceptibilidad": c["susceptibilidad"],
+            "exposicion": c["exposicion"],
+            "dist_rio_m": c["dist_rio_m"],
+            "elev_media_m": c["elev_media_m"],
+            "pendiente_grados": c["pendiente_grados"],
+            "drenaje_m": c["drenaje_m"],
+            "canales_n": c["canales_n"],
+            "poblacion": c["poblacion"],
+            "ie_n": c["ie_n"],
+            "salud_n": c["salud_n"],
+            "predes_n": c["predes_n"],
+        }
+        if c["spatial_id"] in riesgo_por_celda:
+            r = riesgo_por_celda[c["spatial_id"]]
+            props["indice_riesgo"] = r["indice"]
+            props["clase_riesgo"] = r["clase"]
+        features.append({"type": "Feature", "id": c["spatial_id"], "properties": props,
+                         "geometry": {"type": "Polygon", "coordinates": [[[round(x, 6), round(y, 6)] for x, y in anillo]]}})
+
+    for p in puntos:
+        features.append({"type": "Feature", "id": f"pc-{p['codigo']}", "geometry":
+                         {"type": "Point", "coordinates": [p["lon"], p["lat"]]},
+                         "properties": {"tipo_elemento": "punto_critico", "nombre": p["nombre"],
+                                        "codigo": p["codigo"], "tipo_peligro": p["tipo"],
+                                        "viviendas": p["viviendas"], "personas": p["personas"],
+                                        "fuente": "PREDES 2022"}})
+
+    features.append({"type": "Feature", "id": "rio-chillon", "geometry":
+                     {"type": "LineString", "coordinates": _traza_rio(puntos, celdas_est)},
+                     "properties": {"tipo_elemento": "rio", "nombre": "Río Chillón",
+                                    "nota": "Traza aproximada; en el tramo de los puentes sigue los puntos críticos"}})
+
+    return {
+        "type": "FeatureCollection",
+        "name": "VIGÍA Chillón — territorio y riesgo",
+        "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}},
+        "fecha": fecha,
+        "fuentes": ("Límite distrital INEI 2023 (SDOT-PCM); hidrografía MINAM; DEM Terrain Tiles; "
+                    "WorldPop 2017; GHSL 2020; CENEPRED escenario FEN 2023; PREDES 2022"),
+        "nota_geometria": ("Las celdas se generaron en EPSG:32718 y aquí se expresan en WGS84 "
+                           "mediante aproximación local; su uso es de visualización."),
+        "features": features,
+    }
+
+
 @app.get("/api/campo-simulado", tags=["campo"],
          summary="SIMULADO: reportes ciudadanos y bitácora de vigías del piloto previsto")
 def campo_simulado(fecha: str = Query(..., description="AAAA-MM-DD")):
@@ -345,6 +445,15 @@ def modelo():
     if not f:
         raise HTTPException(503, "El modelo no está entrenado.")
     return f
+
+
+@app.get("/mapa", include_in_schema=False)
+def mapa():
+    """Mapa interactivo sobre imagen satelital, alimentado por /api/geojson."""
+    ruta = WEB / "mapa.html"
+    if ruta.exists():
+        return FileResponse(ruta)
+    raise HTTPException(404, "El mapa no está disponible.")
 
 
 @app.get("/guia", include_in_schema=False)

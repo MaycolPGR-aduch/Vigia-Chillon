@@ -378,6 +378,7 @@ def main() -> int:
     # 2b) navegación entre el tablero, la guía y la documentación de la API
     NAV = ('<nav class="nav">'
            '<a href="/" aria-current="page">Tablero</a>'
+           '<a href="/mapa">Mapa</a>'
            '<a href="/guia">Cómo funciona</a>'
            '<a href="/docs">API</a>'
            '</nav>')
