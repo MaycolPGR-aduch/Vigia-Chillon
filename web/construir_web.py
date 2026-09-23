@@ -375,6 +375,24 @@ def main() -> int:
     tpl = re.sub(r'<svg width="11" height="11" viewBox="0 0 16 16"[^>]*>.*?</svg>\s*Prototipo ilustrativo',
                  "Prototipo TRL 4 · datos servidos por la API", tpl, flags=re.S)
 
+    # 2b) navegación entre el tablero, la guía y la documentación de la API
+    NAV = ('<nav class="nav">'
+           '<a href="/" aria-current="page">Tablero</a>'
+           '<a href="/guia">Cómo funciona</a>'
+           '<a href="/docs">API</a>'
+           '</nav>')
+    tpl = re.sub(r'(<span class="sub">Puente Piedra[^<]*</span>\s*</div>)',
+                 r'\1' + NAV, tpl, count=1)
+    CSS_NAV = (
+        ".nav{display:flex;gap:0;border:1px solid var(--line);border-radius:7px;"
+        "overflow:hidden;background:var(--surface)}"
+        ".nav a{display:block;padding:7px 14px;font-family:var(--display);font-weight:600;"
+        "font-size:12.5px;color:var(--ink-2);text-decoration:none;border-right:1px solid var(--line)}"
+        ".nav a:last-child{border-right:0}"
+        ".nav a:hover{background:var(--surface-2)}"
+        '.nav a[aria-current="page"]{background:var(--accent);color:#fff}')
+    tpl = tpl.replace("</style>", CSS_NAV + "\n</style>", 1)
+
     # 3) selector de escenarios -> fechas reales + campo libre
     botones = "".join(
         f'<button type="button" data-f="{p["f"]}" aria-pressed="{"true" if i == 0 else "false"}">'

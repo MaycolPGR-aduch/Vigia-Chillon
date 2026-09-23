@@ -191,6 +191,7 @@ footer b{color:var(--ink-2)}
   svg.map{max-width:260px;margin:0 auto}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.nav{display:flex;gap:0;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--surface)}.nav a{display:block;padding:7px 14px;font-family:var(--display);font-weight:600;font-size:12.5px;color:var(--ink-2);text-decoration:none;border-right:1px solid var(--line)}.nav a:last-child{border-right:0}.nav a:hover{background:var(--surface-2)}.nav a[aria-current="page"]{background:var(--accent);color:#fff}
 .apirow{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:3px 0;border-bottom:1px solid var(--line-soft);font-family:var(--mono)}
 .apirow code{color:var(--ink-2)}.apirow .ok{color:var(--r1);font-weight:600}
 .apirow .ms{color:var(--ink-3)}
@@ -201,7 +202,7 @@ footer b{color:var(--ink-2)}
     <div class="brand">
       <h1>VIGÍA Chillón</h1>
       <span class="sub">Puente Piedra · malla 500 m</span>
-    </div>
+    </div><nav class="nav"><a href="/" aria-current="page">Tablero</a><a href="/guia">Cómo funciona</a><a href="/docs">API</a></nav>
     <span class="tag" style="border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)">
       Prototipo TRL 4 · datos servidos por la API
     </span>

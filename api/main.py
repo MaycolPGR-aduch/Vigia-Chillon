@@ -347,6 +347,15 @@ def modelo():
     return f
 
 
+@app.get("/guia", include_in_schema=False)
+def guia():
+    """Página explicativa: arquitectura, modelo de datos, transparencia y hoja de ruta."""
+    ruta = WEB / "guia.html"
+    if ruta.exists():
+        return FileResponse(ruta)
+    raise HTTPException(404, "La guía no está disponible.")
+
+
 @app.get("/", include_in_schema=False)
 def inicio():
     indice = WEB / "index.html"

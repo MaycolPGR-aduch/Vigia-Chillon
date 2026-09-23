@@ -48,7 +48,8 @@ vigia-trl4/
 │   └── artefactos/      modelo.joblib, ficha_modelo.json, loo_detalle.json
 ├── api/main.py        servicio FastAPI; OpenAPI en /docs
 ├── web/index.html     tablero; no contiene datos del distrito, los pide a la API
-├── tests/             22 pruebas de integración
+├── web/guia.html      pestaña explicativa con los diagramas de arquitectura y de la base
+├── tests/             29 pruebas de integración
 ├── informe/           log del pipeline e INFORME_PRUEBAS.md
 └── datos/vigia.db     base analítica (260 celdas, 8 613 días)
 ```
@@ -73,7 +74,11 @@ python informe/generar_informe.py
 uvicorn api.main:app --reload
 ```
 
-Tablero en <http://127.0.0.1:8000/> · documentación de la API en <http://127.0.0.1:8000/docs>
+Tablero en <http://127.0.0.1:8000/> · guía explicativa en <http://127.0.0.1:8000/guia> ·
+documentación de la API en <http://127.0.0.1:8000/docs>
+
+La pestaña **Cómo funciona** está pensada para quien revisa el proyecto: explica la
+arquitectura, el modelo de datos y la hoja de ruta con diagramas, y lee sus cifras de la API.
 
 La base `datos/vigia.db` y el modelo entrenado viajan en el repositorio, de modo que
 los pasos 1 y 2 no son necesarios para levantar el servicio ni para desplegarlo.
@@ -134,6 +139,7 @@ gcloud run deploy vigia-chillon --source . --region southamerica-west1 --allow-u
 | GET | `/api/eventos` | los 8 positivos corroborados; declara que no hay negativos |
 | GET | `/api/modelo` | ficha del modelo: métricas, límites y usos previstos |
 | GET | `/docs` | documentación interactiva OpenAPI |
+| GET | `/guia` | página explicativa: arquitectura, modelo de datos, transparencia y hoja de ruta |
 
 ---
 

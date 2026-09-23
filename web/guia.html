@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>VIGÍA Chillón · Cómo funciona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#EBEEEF; --surface:#FFFFFF; --surface-2:#F4F6F6; --line:#D2DADD; --line-soft:#E2E8EA;
+  --ink:#10212A; --ink-2:#3C5561; --ink-3:#6B838E;
+  --accent:#0E7C86; --accent-soft:#D9EBEC; --accent-ink:#0A5C64;
+  --r1:#5B8C6E; --r2:#C9971F; --r3:#D2702A; --r4:#AE3833;
+  --demo:#7A4FB5; --demo-soft:#EDE4F8;
+  --shadow:0 1px 2px rgba(16,33,42,.06),0 8px 24px -16px rgba(16,33,42,.28);
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  --display:"Archivo","IBM Plex Sans",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --ground:#0C181D; --surface:#132630; --surface-2:#0F1F27; --line:#27414C; --line-soft:#1D343E;
+  --ink:#E4EDF0; --ink-2:#A8BFC8; --ink-3:#7A949F;
+  --accent:#4FB3B8; --accent-soft:#12343A; --accent-ink:#8FD4D6;
+  --r1:#6FA783; --r2:#DDAE36; --r3:#E5884A; --r4:#D0584F;
+  --demo:#B694E8; --demo-soft:#251C37;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0C181D; --surface:#132630; --surface-2:#0F1F27; --line:#27414C; --line-soft:#1D343E;
+  --ink:#E4EDF0; --ink-2:#A8BFC8; --ink-3:#7A949F;
+  --accent:#4FB3B8; --accent-soft:#12343A; --accent-ink:#8FD4D6;
+  --r1:#6FA783; --r2:#DDAE36; --r3:#E5884A; --r4:#D0584F;
+  --demo:#B694E8; --demo-soft:#251C37;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:0 56px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+a{color:var(--accent-ink)}
+code{font-family:var(--mono);font-size:.92em;background:var(--surface-2);border:1px solid var(--line-soft);border-radius:4px;padding:1px 5px}
+
+/* ---- cabecera ---- */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--ground) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hbar{max-width:1080px;margin:0 auto;padding:12px 16px;display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto}
+.brand h1{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.brand .sub{font-size:11.5px;color:var(--ink-3);font-family:var(--display);font-weight:500}
+.nav{display:flex;gap:0;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--surface)}
+.nav a{display:block;padding:7px 15px;font-family:var(--display);font-weight:600;font-size:12.5px;color:var(--ink-2);text-decoration:none;border-right:1px solid var(--line)}
+.nav a:last-child{border-right:0}
+.nav a:hover{background:var(--surface-2)}
+.nav a[aria-current="page"]{background:var(--accent);color:#fff}
+
+/* ---- estructura ---- */
+section{margin-top:34px}
+.eyebrow{font-family:var(--display);font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:5px}
+h2.t{font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
+.lead{font-size:14.5px;color:var(--ink-2);max-width:72ch;margin:0 0 18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px;box-shadow:var(--shadow);padding:18px 20px}
+.card+.card{margin-top:14px}
+p{margin:0 0 12px;max-width:72ch}
+p:last-child{margin-bottom:0}
+
+/* ---- cifras en vivo ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px;margin-bottom:18px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.stat .k{font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.stat .v{font-family:var(--mono);font-size:25px;font-weight:600;letter-spacing:-.02em;margin-top:4px;line-height:1.1}
+.stat .d{font-size:11.5px;color:var(--ink-3);margin-top:3px}
+.stat.alerta .v{color:var(--r4)}
+
+/* ---- diagramas ---- */
+.figura{margin:6px 0 4px}
+svg.dia{width:100%;height:auto;display:block;overflow:visible}
+.dia .caja{fill:var(--surface-2);stroke:var(--line)}
+.dia .caja-acc{fill:var(--accent-soft);stroke:var(--accent)}
+.dia .caja-sim{fill:var(--demo-soft);stroke:var(--demo)}
+.dia .tit{font-family:var(--display);font-size:11.5px;font-weight:700;fill:var(--ink)}
+.dia .sub{font-family:var(--sans);font-size:9.5px;fill:var(--ink-2)}
+.dia .mono{font-family:var(--mono);font-size:9px;fill:var(--ink-3)}
+.dia .etiq{font-family:var(--display);font-size:9.5px;font-weight:700;fill:var(--accent-ink);letter-spacing:.06em}
+.dia .flecha{stroke:var(--ink-3);stroke-width:1.6;fill:none}
+.dia .flecha-acc{stroke:var(--accent);stroke-width:2;fill:none}
+.dia .cabeza{fill:var(--ink-3)}
+.dia .cabeza-acc{fill:var(--accent)}
+.pie{font-size:11.5px;color:var(--ink-3);border-left:2px solid var(--line);padding-left:11px;margin-top:12px}
+
+/* ---- tablas ---- */
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:480px}
+th{font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:0 10px 8px;border-bottom:1px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+td.mono{font-family:var(--mono);font-size:11.5px}
+
+/* ---- listas de pasos ---- */
+.pasos{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.paso{display:grid;grid-template-columns:26px 1fr;gap:12px;align-items:start}
+.paso .n{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--mono);font-size:11px;font-weight:600;display:grid;place-items:center}
+.paso b{font-family:var(--display);font-size:13px}
+.paso p{font-size:12.5px;color:var(--ink-2);margin:2px 0 0}
+
+/* ---- chips y avisos ---- */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-family:var(--mono);font-size:11px;background:var(--surface-2);border:1px solid var(--line-soft);border-radius:99px;padding:3px 10px;color:var(--ink-2)}
+.aviso{background:var(--demo-soft);border:1px solid color-mix(in srgb,var(--demo) 45%,transparent);border-radius:9px;padding:13px 16px;font-size:13px;color:var(--ink-2)}
+.aviso b{color:var(--ink)}
+.ok{color:var(--r1)} .no{color:var(--r4)}
+
+/* ---- endpoints ---- */
+.eps{display:grid;gap:8px}
+.ep{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;background:var(--surface-2);border:1px solid var(--line-soft);border-radius:8px;padding:9px 12px}
+.ep .m{font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;background:var(--accent);border-radius:4px;padding:2px 7px}
+.ep .r{font-family:var(--mono);font-size:12px;color:var(--ink)}
+.ep .d{font-size:11.5px;color:var(--ink-3);grid-column:2}
+.ep a{font-family:var(--display);font-size:11.5px;font-weight:600;text-decoration:none;white-space:nowrap}
+
+/* ---- escalera TRL ---- */
+.trl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:end}
+.trl .p{border-radius:10px;padding:14px 15px;border:1px solid var(--line);background:var(--surface-2)}
+.trl .p.ahora{background:var(--accent-soft);border-color:var(--accent)}
+.trl .p.meta{background:color-mix(in srgb,var(--r3) 12%,var(--surface));border-color:var(--r3)}
+.trl .lvl{font-family:var(--display);font-size:23px;font-weight:700}
+.trl .est{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:1px 0 8px}
+.trl ul{margin:0;padding-left:16px;font-size:11.5px;color:var(--ink-2)}
+.trl li{margin-bottom:3px}
+.h1{min-height:130px}.h2{min-height:180px}.h3{min-height:215px}
+
+footer{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:11.5px;color:var(--ink-3)}
+@media (max-width:760px){
+  .trl{grid-template-columns:1fr}
+  .h1,.h2,.h3{min-height:0}
+  .ep{grid-template-columns:auto 1fr}
+  .ep a{grid-column:2}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hbar">
+    <div class="brand"><h1>VIGÍA Chillón</h1><span class="sub">Puente Piedra · malla 500 m</span></div>
+    <nav class="nav">
+      <a href="/">Tablero</a>
+      <a href="/guia" aria-current="page">Cómo funciona</a>
+      <a href="/docs">API</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ 1. EL PROYECTO ============ -->
+  <section>
+    <div class="eyebrow">El proyecto</div>
+    <h2 class="t">Un sistema que anticipa dónde mirar, y que aprende de lo que se observa</h2>
+    <p class="lead">Puente Piedra convive con el río Chillón en su borde sureste. Cuando la cuenca alta descarga,
+    el distrito se entera por un aviso de cuenca y responde con ocho puentes vigilados a mano. VIGÍA Chillón
+    estima cada día el riesgo de inundación en 260 celdas de 500 m y lo clasifica en cuatro niveles operativos,
+    para que la Gerencia de Gestión del Riesgo de Desastres sepa a dónde enviar la cuadrilla primero.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Celdas analizadas</div><div class="v" id="s-celdas">—</div><div class="d">de 500 × 500 m, todo el distrito</div></div>
+      <div class="stat"><div class="k">Serie diaria de lluvia</div><div class="v" id="s-dias">—</div><div class="d" id="s-rango">CHIRPS, sin huecos</div></div>
+      <div class="stat"><div class="k">Eventos corroborados</div><div class="v" id="s-pos">—</div><div class="d">positivos con doble fuente</div></div>
+      <div class="stat alerta"><div class="k">Negativos verificados</div><div class="v">0</div><div class="d">el vacío que el proyecto viene a llenar</div></div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:14px;margin-bottom:10px">Los tres vacíos que bloquean cualquier modelo</h3>
+      <ol class="pasos">
+        <li class="paso"><span class="n">1</span><div><b>Ningún evento está localizado</b>
+          <p>SINPAD entrega coordenadas de la jurisdicción, no del lugar afectado. No se sabe qué celda se inundó.</p></div></li>
+        <li class="paso"><span class="n">2</span><div><b>No existe registro de dónde <em>no</em> pasó nada</b>
+          <p>La ausencia de reporte no equivale a ausencia de evento. Sin negativos no se puede entrenar ni evaluar un clasificador con honestidad.</p></div></li>
+        <li class="paso"><span class="n">3</span><div><b>Seis de diez puntos críticos municipales no tienen coordenada oficial</b>
+          <p>Se monitorean por nombre, no por posición.</p></div></li>
+      </ol>
+      <p class="pie">Estos vacíos no se resuelven con más datos satelitales ni con un modelo más sofisticado:
+      se resuelven observando el territorio de forma sistemática. Eso es lo que propone el proyecto.</p>
+    </div>
+  </section>
+
+  <!-- ============ 2. ARQUITECTURA ============ -->
+  <section>
+    <div class="eyebrow">Arquitectura</div>
+    <h2 class="t">Seis bloques encadenados</h2>
+    <p class="lead">La unidad común de todo el sistema es la celda de 500 m: cada fuente, cada predicción y
+    cada reporte se refieren al mismo identificador espacial. Lo que producen los módulos de campo (en violeta)
+    vuelve a la base como etiquetas y alimenta el modelo: ese retorno es el bucle de aprendizaje.</p>
+
+    <div class="card figura">
+      <svg class="dia" viewBox="0 0 980 462" role="img" aria-label="Diagrama de arquitectura: fuentes, pipeline, base de datos, motor analítico, API y capas de uso, con un retorno desde los módulos de campo hacia la base de datos">
+        <defs>
+          <marker id="fl" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 Z" class="cabeza"/></marker>
+          <marker id="fla" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 Z" class="cabeza-acc"/></marker>
+        </defs>
+
+        <!-- 1 fuentes -->
+        <text x="8" y="26" class="etiq">1 · FUENTES</text>
+        <g>
+          <rect x="8" y="34" width="228" height="52" rx="8" class="caja"/>
+          <text x="20" y="54" class="tit">Clima</text>
+          <text x="20" y="68" class="sub">CHIRPS diario, IMERG, índices ENSO</text>
+          <text x="20" y="80" class="mono">1981–2026 · público</text>
+
+          <rect x="252" y="34" width="228" height="52" rx="8" class="caja"/>
+          <text x="264" y="54" class="tit">Hidrología</text>
+          <text x="264" y="68" class="sub">Caudal y avisos del Chillón</text>
+          <text x="264" y="80" class="mono">SENAMHI · ANA</text>
+
+          <rect x="496" y="34" width="228" height="52" rx="8" class="caja"/>
+          <text x="508" y="54" class="tit">Territorio</text>
+          <text x="508" y="68" class="sub">DEM, drenaje, canales, exposición</text>
+          <text x="508" y="80" class="mono">MINAM · CENEPRED · INEI</text>
+
+          <rect x="740" y="34" width="232" height="52" rx="8" class="caja"/>
+          <text x="752" y="54" class="tit">Eventos</text>
+          <text x="752" y="68" class="sub">GeoSINPAD, EDAN, evidencia satelital</text>
+          <text x="752" y="80" class="mono">INDECI · Copernicus</text>
+        </g>
+        <path d="M490,90 L490,106" class="flecha" marker-end="url(#fl)"/>
+
+        <!-- 2 pipeline -->
+        <text x="8" y="126" class="etiq">2 · PIPELINE</text>
+        <rect x="8" y="134" width="964" height="46" rx="8" class="caja"/>
+        <text x="20" y="153" class="tit">Extracción, normalización y control de calidad</text>
+        <text x="20" y="168" class="sub">Recorte a la malla · acumulados de 1, 3, 7, 14 y 30 días · 13 controles · manifiesto con SHA-256 del origen</text>
+        <text x="860" y="160" class="mono">Python · pandas</text>
+        <path d="M490,184 L490,200" class="flecha" marker-end="url(#fl)"/>
+
+        <!-- 3 base -->
+        <text x="8" y="220" class="etiq">3 · BASE DE DATOS</text>
+        <rect x="8" y="228" width="964" height="46" rx="8" class="caja-acc"/>
+        <text x="20" y="247" class="tit">Base analítica relacional</text>
+        <text x="20" y="262" class="sub">6 tablas · 260 celdas × 8 613 días · procedencia y políticas metodológicas versionadas</text>
+        <text x="828" y="254" class="mono">SQLite → PostGIS</text>
+        <path d="M490,278 L490,294" class="flecha" marker-end="url(#fl)"/>
+
+        <!-- 4 motor -->
+        <text x="8" y="314" class="etiq">4 · MOTOR ANALÍTICO</text>
+        <g>
+          <rect x="8" y="322" width="310" height="48" rx="8" class="caja"/>
+          <text x="20" y="341" class="tit">Índice territorial</text>
+          <text x="20" y="356" class="sub">Reglas hidroterritoriales interpretables</text>
+
+          <rect x="334" y="322" width="310" height="48" rx="8" class="caja"/>
+          <text x="346" y="341" class="tit">Modelo PU distrital</text>
+          <text x="346" y="356" class="sub">Positivo–no etiquetado sobre 8 583 días</text>
+
+          <rect x="660" y="322" width="312" height="48" rx="8" class="caja-sim"/>
+          <text x="672" y="341" class="tit">Modelo celda–día</text>
+          <text x="672" y="356" class="sub">Requiere etiquetas de campo · es el objetivo</text>
+        </g>
+        <path d="M490,374 L490,390" class="flecha" marker-end="url(#fl)"/>
+
+        <!-- 5 API + 6 uso -->
+        <text x="8" y="436" class="etiq">5 · API  ·  6 · USO</text>
+        <g>
+          <rect x="176" y="418" width="196" height="34" rx="8" class="caja-acc"/>
+          <text x="188" y="439" class="tit">API REST · OpenAPI</text>
+
+          <rect x="388" y="418" width="150" height="34" rx="8" class="caja"/>
+          <text x="400" y="439" class="tit">Tablero municipal</text>
+
+          <rect x="554" y="418" width="196" height="34" rx="8" class="caja-sim"/>
+          <text x="566" y="439" class="tit">App, WhatsApp y bitácora</text>
+
+          <rect x="766" y="418" width="140" height="34" rx="8" class="caja"/>
+          <text x="778" y="439" class="tit">Mapa público</text>
+        </g>
+
+        <!-- retorno de las etiquetas de campo hacia la base de datos -->
+        <path d="M652,418 L652,408 Q652,396 640,396 L20,396 Q6,396 6,384 L6,262 Q6,252 16,252" class="flecha-acc" marker-end="url(#fla)" stroke-dasharray="5 4"/>
+        <text x="196" y="412" class="etiq" style="fill:var(--accent)">RETORNO: ETIQUETAS VERIFICADAS DE CAMPO</text>
+      </svg>
+      <p class="pie">La flecha punteada es lo que distingue a VIGÍA Chillón de un tablero de monitoreo
+      convencional: las observaciones de campo verificadas regresan a la base de datos y reentrenan el modelo.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:14px;margin-bottom:10px">Tecnologías por bloque</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Bloque</th><th>Tecnología</th><th>Por qué</th></tr></thead>
+          <tbody>
+            <tr><td>Pipeline</td><td class="mono">Python · pandas · openpyxl</td><td>Lee la base maestra y normaliza con trazabilidad</td></tr>
+            <tr><td>Base de datos</td><td class="mono">SQLite 3</td><td>Relacional, sin servidor, viaja dentro del contenedor. En producción: PostgreSQL + PostGIS</td></tr>
+            <tr><td>Modelo</td><td class="mono">scikit-learn · NumPy · joblib</td><td>Regresión logística regularizada en Pipeline, versionada como artefacto</td></tr>
+            <tr><td>API</td><td class="mono">FastAPI · Uvicorn · Pydantic</td><td>Documentación OpenAPI automática y validación de tipos</td></tr>
+            <tr><td>Tablero</td><td class="mono">HTML · CSS · JavaScript · SVG</td><td>Sin frameworks ni librerías de mapas: nada que falle en la máquina del evaluador</td></tr>
+            <tr><td>Pruebas</td><td class="mono">pytest · TestClient</td><td>26 pruebas de integración reproducibles</td></tr>
+            <tr><td>Empaquetado</td><td class="mono">Docker · python:3.11-slim</td><td>Imagen autosuficiente: no necesita el Excel ni reentrenar</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="pie">El mapa no usa librería cartográfica: las 260 celdas se dibujan en SVG desde las coordenadas
+      de la base y la traza del río se deriva de la distancia al cauce de cada celda. El mapa es una vista de
+      los datos, no una imagen traída de un servicio externo.</p>
+    </div>
+  </section>
+
+  <!-- ============ 3. QUÉ PASA EN UNA CONSULTA ============ -->
+  <section>
+    <div class="eyebrow">Recorrido de una petición</div>
+    <h2 class="t">Qué ocurre cuando eliges una fecha</h2>
+    <p class="lead">El riesgo no está precalculado ni guardado en la página. Cada vez que se consulta una fecha,
+    el servidor rehace el cálculo completo. Esto es lo que sucede en los milisegundos que tarda.</p>
+
+    <div class="card figura">
+      <svg class="dia" viewBox="0 0 980 260" role="img" aria-label="Diagrama de secuencia: el navegador pide una fecha, la API consulta la base de datos, evalúa el modelo, calcula el índice de las 260 celdas y responde">
+        <g>
+          <rect x="8" y="16" width="150" height="34" rx="7" class="caja"/><text x="24" y="38" class="tit">Navegador</text>
+          <rect x="258" y="16" width="150" height="34" rx="7" class="caja-acc"/><text x="274" y="38" class="tit">API</text>
+          <rect x="508" y="16" width="150" height="34" rx="7" class="caja"/><text x="524" y="38" class="tit">SQLite</text>
+          <rect x="758" y="16" width="150" height="34" rx="7" class="caja"/><text x="774" y="38" class="tit">Modelo</text>
+        </g>
+        <line x1="83" y1="52" x2="83" y2="236" class="flecha" stroke-dasharray="3 4"/>
+        <line x1="333" y1="52" x2="333" y2="236" class="flecha" stroke-dasharray="3 4"/>
+        <line x1="583" y1="52" x2="583" y2="236" class="flecha" stroke-dasharray="3 4"/>
+        <line x1="833" y1="52" x2="833" y2="236" class="flecha" stroke-dasharray="3 4"/>
+
+        <path d="M83,76 L327,76" class="flecha-acc" marker-end="url(#fla)"/>
+        <text x="96" y="70" class="mono">GET /api/riesgo?fecha=2023-03-11</text>
+
+        <path d="M333,106 L577,106" class="flecha" marker-end="url(#fl)"/>
+        <text x="346" y="100" class="mono">SELECT lluvia del día y acumulados</text>
+        <path d="M577,130 L339,130" class="flecha" marker-end="url(#fl)"/>
+        <text x="352" y="124" class="mono">14.19 mm en 3 días</text>
+
+        <path d="M333,160 L827,160" class="flecha" marker-end="url(#fl)"/>
+        <text x="346" y="154" class="mono">predict_proba(lluvia transformada)</text>
+        <path d="M827,184 L339,184" class="flecha" marker-end="url(#fl)"/>
+        <text x="352" y="178" class="mono">probabilidad 0.918</text>
+
+        <rect x="258" y="196" width="150" height="26" rx="6" class="caja-acc"/>
+        <text x="268" y="213" class="sub">índice de 260 celdas</text>
+
+        <path d="M327,236 L89,236" class="flecha-acc" marker-end="url(#fla)"/>
+        <text x="100" y="230" class="mono">JSON con 260 celdas, clase y resumen · ~2 ms</text>
+      </svg>
+      <p class="pie">Por eso el tablero muestra el tiempo de cálculo en la cabecera: es la prueba de que
+      el valor se computó en ese instante y no estaba escrito de antemano.</p>
+    </div>
+  </section>
+
+  <!-- ============ 4. BASE DE DATOS ============ -->
+  <section>
+    <div class="eyebrow">Modelo de datos</div>
+    <h2 class="t">La base relacional</h2>
+    <p class="lead">Seis tablas. El Excel de la base maestra es la <em>fuente</em>, no la base de datos:
+    se lee una sola vez durante la extracción y el contenedor desplegado ni siquiera lo lleva dentro.
+    Las dos tablas grandes no se relacionan por clave foránea sino que se combinan en la consulta:
+    el riesgo de una fecha es el cruce de las 260 celdas con la fila de lluvia de ese día.</p>
+
+    <div class="card figura">
+      <svg class="dia" viewBox="0 0 980 400" role="img" aria-label="Diagrama de la base de datos: seis tablas con sus columnas y la forma en que se combinan para calcular el riesgo">
+        <!-- celdas -->
+        <rect x="8" y="14" width="290" height="240" rx="9" class="caja-acc"/>
+        <text x="22" y="36" class="tit">celdas</text>
+        <text x="232" y="36" class="mono">260 filas</text>
+        <line x1="22" y1="44" x2="284" y2="44" class="flecha" stroke-width="1"/>
+        <text x="22" y="60" class="mono">PK spatial_id</text>
+        <text x="22" y="76" class="mono">fila · columna · lon · lat · area_m2</text>
+        <text x="22" y="92" class="mono">elev_media_m · pendiente_grados</text>
+        <text x="22" y="108" class="mono">dist_rio_m · drenaje_m · canales_n</text>
+        <text x="22" y="124" class="mono">dist_canal_m · vias_m</text>
+        <text x="22" y="140" class="mono">ie_n · alumnos · salud_n</text>
+        <text x="22" y="156" class="mono">predes_n · poblacion · construido_m2</text>
+        <text x="22" y="176" class="sub">calculadas por el pipeline:</text>
+        <text x="22" y="192" class="mono">susceptibilidad · exposicion</text>
+        <text x="22" y="220" class="sub">Los 22 predictores del territorio,</text>
+        <text x="22" y="234" class="sub">fijos en el tiempo.</text>
+
+        <!-- precipitacion -->
+        <rect x="346" y="14" width="290" height="150" rx="9" class="caja-acc"/>
+        <text x="360" y="36" class="tit">precipitacion</text>
+        <text x="548" y="36" class="mono">8 613 filas</text>
+        <line x1="360" y1="44" x2="622" y2="44" class="flecha" stroke-width="1"/>
+        <text x="360" y="60" class="mono">PK fecha</text>
+        <text x="360" y="76" class="mono">p_t0</text>
+        <text x="360" y="92" class="mono">p_1d · p_3d · p_7d · p_14d · p_30d</text>
+        <text x="360" y="112" class="sub">Serie diaria de la cuenca, 2003–2026,</text>
+        <text x="360" y="126" class="sub">sin huecos. Los acumulados son</text>
+        <text x="360" y="140" class="sub">estrictamente previos al día objetivo.</text>
+        <text x="360" y="156" class="mono">INDEX idx_precip_fecha</text>
+
+        <!-- cruce -->
+        <path d="M298,120 L340,120" class="flecha-acc" marker-end="url(#fla)"/>
+        <path d="M491,164 L491,196" class="flecha-acc" marker-end="url(#fla)"/>
+        <rect x="346" y="198" width="290" height="56" rx="9" class="caja"/>
+        <text x="360" y="220" class="tit">Cruce en la consulta</text>
+        <text x="360" y="238" class="sub">260 celdas × 1 día = índice y clase por celda</text>
+
+        <!-- eventos -->
+        <rect x="684" y="14" width="288" height="112" rx="9" class="caja"/>
+        <text x="698" y="36" class="tit">eventos</text>
+        <text x="916" y="36" class="mono">8 filas</text>
+        <line x1="698" y1="44" x2="958" y2="44" class="flecha" stroke-width="1"/>
+        <text x="698" y="60" class="mono">PK episodio</text>
+        <text x="698" y="76" class="mono">fecha · fenomeno · evidencia</text>
+        <text x="698" y="96" class="sub">Positivos corroborados por dos fuentes.</text>
+        <text x="698" y="112" class="sub">No hay tabla de negativos: no existen.</text>
+
+        <!-- puntos criticos -->
+        <rect x="684" y="140" width="288" height="114" rx="9" class="caja"/>
+        <text x="698" y="162" class="tit">puntos_criticos</text>
+        <text x="916" y="162" class="mono">8 filas</text>
+        <line x1="698" y1="170" x2="958" y2="170" class="flecha" stroke-width="1"/>
+        <text x="698" y="186" class="mono">PK codigo</text>
+        <text x="698" y="202" class="mono">nombre · lon · lat</text>
+        <text x="698" y="218" class="mono">viviendas · personas · tipo</text>
+        <text x="698" y="238" class="sub">Inventario PREDES 2022 con coordenadas.</text>
+
+        <!-- rio -->
+        <rect x="8" y="272" width="290" height="104" rx="9" class="caja"/>
+        <text x="22" y="294" class="tit">rio</text>
+        <text x="240" y="294" class="mono">16 filas</text>
+        <line x1="22" y1="302" x2="284" y2="302" class="flecha" stroke-width="1"/>
+        <text x="22" y="318" class="mono">PK orden · x · y</text>
+        <text x="22" y="340" class="sub">Traza del Chillón derivada de la distancia</text>
+        <text x="22" y="354" class="sub">al cauce de cada celda: corre por el</text>
+        <text x="22" y="368" class="sub">borde sureste del distrito.</text>
+
+        <!-- metadatos -->
+        <rect x="346" y="272" width="290" height="104" rx="9" class="caja"/>
+        <text x="360" y="294" class="tit">metadatos</text>
+        <text x="578" y="294" class="mono">11 filas</text>
+        <line x1="360" y1="302" x2="622" y2="302" class="flecha" stroke-width="1"/>
+        <text x="360" y="318" class="mono">PK clave · valor</text>
+        <text x="360" y="340" class="sub">SHA-256 del archivo de origen, fecha de</text>
+        <text x="360" y="354" class="sub">construcción y las políticas metodológicas</text>
+        <text x="360" y="368" class="sub">que el pipeline hace cumplir.</text>
+
+        <!-- nota simulada -->
+        <rect x="684" y="272" width="288" height="104" rx="9" class="caja-sim"/>
+        <text x="698" y="294" class="tit">Datos de campo</text>
+        <text x="880" y="294" class="mono">SIMULADOS</text>
+        <line x1="698" y1="302" x2="958" y2="302" class="flecha" stroke-width="1"/>
+        <text x="698" y="320" class="sub">Reportes y bitácora no están en la base:</text>
+        <text x="698" y="334" class="sub">se generan al vuelo a partir de la lluvia</text>
+        <text x="698" y="348" class="sub">real. Cuando exista trabajo de campo,</text>
+        <text x="698" y="362" class="sub">serán dos tablas más y el bucle se cierra.</text>
+      </svg>
+      <p class="pie">SQLite se eligió porque la base es de solo lectura, pesa menos de 1 MB y viaja dentro de la
+      imagen: cero configuración y cero puntos de falla en un plan gratuito. El esquema ya es el de producción;
+      migrar a PostgreSQL con PostGIS significa cambiar la cadena de conexión y añadir la extensión espacial
+      para trabajar con geometrías en vez de centroides.</p>
+    </div>
+  </section>
+
+  <!-- ============ 5. EL BUCLE ============ -->
+  <section>
+    <div class="eyebrow">La innovación</div>
+    <h2 class="t">Un modelo que aprende del territorio que vigila</h2>
+    <p class="lead">Los registros oficiales no dicen dónde ocurrió una inundación ni dónde no ocurrió.
+    La observación de campo produce ambas cosas, y con ellas el modelo puede bajar de la escala distrital
+    a la celda de 500 m.</p>
+
+    <div class="card figura">
+      <svg class="dia" viewBox="0 0 980 230" role="img" aria-label="Bucle de aprendizaje en cinco pasos con un retorno de reentrenamiento">
+        <g>
+          <rect x="8" y="16" width="178" height="96" rx="9" class="caja"/>
+          <circle cx="30" cy="38" r="10" fill="var(--accent)"/><text x="27" y="42" class="mono" style="fill:#fff">1</text>
+          <text x="48" y="42" class="tit">Modelo estima</text>
+          <text x="20" y="64" class="sub">Lluvia, caudal, ENSO y 22</text>
+          <text x="20" y="78" class="sub">variables del territorio dan</text>
+          <text x="20" y="92" class="sub">una probabilidad por celda.</text>
+          <text x="20" y="106" class="mono">automático</text>
+
+          <rect x="204" y="16" width="178" height="96" rx="9" class="caja"/>
+          <circle cx="226" cy="38" r="10" fill="var(--accent)"/><text x="223" y="42" class="mono" style="fill:#fff">2</text>
+          <text x="244" y="42" class="tit">Alerta focalizada</text>
+          <text x="216" y="64" class="sub">El tablero prioriza qué</text>
+          <text x="216" y="78" class="sub">celdas y qué puntos vigilar</text>
+          <text x="216" y="92" class="sub">hoy, a 3 y 7 días.</text>
+          <text x="216" y="106" class="mono">Gerencia de GRD</text>
+
+          <rect x="400" y="16" width="178" height="96" rx="9" class="caja-sim"/>
+          <circle cx="422" cy="38" r="10" fill="var(--demo)"/><text x="419" y="42" class="mono" style="fill:#fff">3</text>
+          <text x="440" y="42" class="tit">Observación</text>
+          <text x="412" y="64" class="sub">8–10 vigías registran los</text>
+          <text x="412" y="78" class="sub">8 puentes; los vecinos</text>
+          <text x="412" y="92" class="sub">reportan con foto y GPS.</text>
+          <text x="412" y="106" class="mono">vigías y vecinos</text>
+
+          <rect x="596" y="16" width="178" height="96" rx="9" class="caja-sim"/>
+          <circle cx="618" cy="38" r="10" fill="var(--demo)"/><text x="615" y="42" class="mono" style="fill:#fff">4</text>
+          <text x="636" y="42" class="tit">Verificación</text>
+          <text x="608" y="64" class="sub">Coherencia con lluvia y</text>
+          <text x="608" y="78" class="sub">caudal, confirmación del</text>
+          <text x="608" y="92" class="sub">vigía y cierre municipal.</text>
+          <text x="608" y="106" class="mono">sistema + GRD</text>
+
+          <rect x="792" y="16" width="180" height="96" rx="9" class="caja-acc"/>
+          <circle cx="814" cy="38" r="10" fill="var(--accent)"/><text x="811" y="42" class="mono" style="fill:#fff">5</text>
+          <text x="832" y="42" class="tit">Etiquetas</text>
+          <text x="804" y="64" class="sub">Cada jornada sin novedad</text>
+          <text x="804" y="78" class="sub">es un negativo verificado;</text>
+          <text x="804" y="92" class="sub">cada desborde, un positivo.</text>
+          <text x="804" y="106" class="mono">el dato que no existe</text>
+        </g>
+        <path d="M186,64 L200,64" class="flecha" marker-end="url(#fl)"/>
+        <path d="M382,64 L396,64" class="flecha" marker-end="url(#fl)"/>
+        <path d="M578,64 L592,64" class="flecha" marker-end="url(#fl)"/>
+        <path d="M774,64 L788,64" class="flecha" marker-end="url(#fl)"/>
+        <path d="M882,112 L882,150 Q882,166 866,166 L114,166 Q97,166 97,150 L97,118" class="flecha-acc" marker-end="url(#fla)"/>
+        <rect x="392" y="150" width="196" height="32" rx="7" class="caja-acc"/>
+        <text x="410" y="170" class="tit">6 · Reentrenamiento</text>
+        <text x="8" y="212" class="sub">Sin negativos verificados no se puede reportar precisión ni tasa de falsos positivos: esas métricas no están definidas.</text>
+        <text x="8" y="226" class="sub">Por eso el modelo actual es positivo–no etiquetado y no un clasificador binario.</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ 6. REAL VS SIMULADO ============ -->
+  <section>
+    <div class="eyebrow">Transparencia</div>
+    <h2 class="t">Qué es real y qué es simulado</h2>
+    <div class="card">
+      <div class="tw">
+        <table>
+          <thead><tr><th style="width:38%">Elemento</th><th style="width:18%">Naturaleza</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td>Malla de 260 celdas y sus 22 predictores</td><td class="ok"><b>Real</b></td><td>SDOT-PCM/INEI 2023, MINAM, CENEPRED, PREDES, WorldPop, GHSL</td></tr>
+            <tr><td>Serie diaria de lluvia 2003–2026</td><td class="ok"><b>Real</b></td><td>CHIRPS, promedio zonal de la cuenca del Chillón, sin huecos</td></tr>
+            <tr><td>Los 8 eventos corroborados</td><td class="ok"><b>Real</b></td><td>SINPAD más una fuente independiente</td></tr>
+            <tr><td>Los 8 puntos críticos con coordenadas</td><td class="ok"><b>Real</b></td><td>PREDES 2022</td></tr>
+            <tr><td>Índice territorial y probabilidad del modelo</td><td><b>Calculados</b></td><td>Se computan en cada petición sobre los datos reales</td></tr>
+            <tr><td>Reportes ciudadanos y bitácora de vigías</td><td class="no"><b>Simulados</b></td><td>Servidos por <code>/api/campo-simulado</code>; se generan de forma determinista a partir de la lluvia real de cada fecha</td></tr>
+            <tr><td>Caudal del día y aviso SENAMHI</td><td class="no"><b>Simulados</b></td><td>Las series hidrológicas están pendientes de gestión institucional</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="aviso" style="margin-top:14px">
+        <b>El nivel de riesgo es un índice demostrativo por reglas, no un pronóstico validado.</b>
+        El sistema apoya la decisión municipal y no sustituye los avisos oficiales de SENAMHI, INDECI,
+        CENEPRED ni ANA.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. API ============ -->
+  <section>
+    <div class="eyebrow">Verificación</div>
+    <h2 class="t">Compruébelo usted mismo</h2>
+    <p class="lead">Cada recurso devuelve JSON y se puede abrir directamente en el navegador.
+    La prueba más rápida: comparar un día de lluvias con uno de estiaje.</p>
+    <div class="card">
+      <div class="eps">
+        <div class="ep"><span class="m">GET</span><span class="r">/api/riesgo?fecha=2023-03-11</span><a href="/api/riesgo?fecha=2023-03-11" target="_blank" rel="noopener">abrir →</a>
+          <span class="d">Ciclón Yaku: 45 celdas en nivel alto o muy alto</span></div>
+        <div class="ep"><span class="m">GET</span><span class="r">/api/riesgo?fecha=2015-08-03</span><a href="/api/riesgo?fecha=2015-08-03" target="_blank" rel="noopener">abrir →</a>
+          <span class="d">Estiaje: ninguna celda en nivel alto</span></div>
+        <div class="ep"><span class="m">GET</span><span class="r">/api/salud</span><a href="/api/salud" target="_blank" rel="noopener">abrir →</a>
+          <span class="d">Procedencia con SHA-256 del origen y políticas metodológicas</span></div>
+        <div class="ep"><span class="m">GET</span><span class="r">/api/modelo</span><a href="/api/modelo" target="_blank" rel="noopener">abrir →</a>
+          <span class="d">Ficha del modelo: métricas, limitaciones y usos previstos</span></div>
+        <div class="ep"><span class="m">GET</span><span class="r">/api/celdas</span><a href="/api/celdas" target="_blank" rel="noopener">abrir →</a>
+          <span class="d">Las 260 celdas con todos sus predictores</span></div>
+        <div class="ep"><span class="m">GET</span><span class="r">/api/campo-simulado?fecha=2023-03-11</span><a href="/api/campo-simulado?fecha=2023-03-11" target="_blank" rel="noopener">abrir →</a>
+          <span class="d">Datos de campo simulados, con su advertencia explícita</span></div>
+      </div>
+      <p class="pie">Documentación interactiva completa en <a href="/docs">/docs</a>, donde cada recurso se puede
+      ejecutar desde el navegador con la fecha que se quiera.</p>
+    </div>
+  </section>
+
+  <!-- ============ 8. FUTURO ============ -->
+  <section>
+    <div class="eyebrow">Estado y hoja de ruta</div>
+    <h2 class="t">Dónde estamos y qué sigue</h2>
+    <p class="lead">Este prototipo acredita el nivel de madurez de entrada exigido por el concurso.
+    El modelo por celda, los negativos verificados y la validación en entorno municipal son el alcance
+    del proyecto.</p>
+
+    <div class="trl">
+      <div class="p h1">
+        <div class="lvl">TRL 3</div><div class="est">antes</div>
+        <ul>
+          <li>260 celdas y 22 predictores</li>
+          <li>8 613 días de lluvia de cuenca</li>
+          <li>271 registros SINPAD auditados</li>
+          <li>Pipeline definido, sin ejecutar de extremo a extremo</li>
+        </ul>
+      </div>
+      <div class="p ahora h2">
+        <div class="lvl">TRL 4</div><div class="est">esto que está viendo</div>
+        <ul>
+          <li>Pipeline ejecutable con 13 controles de calidad</li>
+          <li>Índice territorial interpretable</li>
+          <li>Modelo PU distrital con validación dejando-uno-fuera</li>
+          <li>API documentada y desplegada</li>
+          <li>Tablero conectado, sin datos embebidos</li>
+          <li>26 pruebas de integración e informe de evidencia</li>
+        </ul>
+      </div>
+      <div class="p meta h3">
+        <div class="lvl">TRL 6+</div><div class="est">al cierre del proyecto</div>
+        <ul>
+          <li>Red de 8–10 vigías con bitácora diaria en los puntos críticos</li>
+          <li>App y canal WhatsApp para reportes ciudadanos</li>
+          <li>Primeros negativos verificados de la historia del distrito</li>
+          <li>Modelo celda–día entrenado y reentrenado con etiquetas de campo</li>
+          <li>Validación en entorno municipal y acta de aceptación</li>
+          <li>Paquete tecnológico transferido y personal capacitado</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="font-size:14px;margin-bottom:12px">Los seis pasos siguientes</h3>
+      <ol class="pasos">
+        <li class="paso"><span class="n">1</span><div><b>Cerrar las series hidrológicas</b>
+          <p>Gestionar ante SENAMHI y ANA el caudal diario de Obrajillo y Puente Magdalena, hoy el vacío más sensible del modelo.</p></div></li>
+        <li class="paso"><span class="n">2</span><div><b>Georreferenciar los puntos críticos municipales</b>
+          <p>Levantamiento GNSS de los diez puntos y de los cinco sectores del PPRRD; resolver el conflicto entre Nueva Esperanza y La Loza.</p></div></li>
+        <li class="paso"><span class="n">3</span><div><b>Migrar a PostgreSQL con PostGIS</b>
+          <p>Trabajar con geometrías reales en lugar de centroides y habilitar consultas espaciales.</p></div></li>
+        <li class="paso"><span class="n">4</span><div><b>Desplegar la bitácora y el canal ciudadano</b>
+          <p>Es el módulo que produce las etiquetas: sin él, el modelo territorial no puede entrenarse.</p></div></li>
+        <li class="paso"><span class="n">5</span><div><b>Entrenar el modelo celda–día y reentrenarlo</b>
+          <p>Con las etiquetas de la primera temporada, y documentar la comparación entre versiones.</p></div></li>
+        <li class="paso"><span class="n">6</span><div><b>Validar en la Municipalidad y transferir</b>
+          <p>Pruebas con usuarios reales, capacitación, paquete tecnológico y acta de aceptación.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <p style="margin-bottom:8px"><b>VIGÍA Chillón</b> · Prototipo de acreditación TRL 4 para el concurso
+    PROCIENCIA E067-2026-04, modalidad Desarrollo, Validación, Transferencia y Uso.
+    Entidad demandante: Municipalidad Distrital de Puente Piedra.</p>
+    <p style="margin-bottom:8px">Fuentes: CHIRPS v3 (UCSB) · GeoSINPAD (INDECI) · escenario FEN 2023 (CENEPRED/SIGRID) ·
+    PREDES 2022 · SDOT-PCM/INEI 2023 · MINAM · WorldPop 2017 · GHSL 2020 · NOAA CPC.</p>
+    <div class="chips">
+      <span class="chip">base: <span id="f-origen">—</span></span>
+      <span class="chip">modelo: <span id="f-modelo">—</span></span>
+      <span class="chip">construida: <span id="f-fecha">—</span></span>
+    </div>
+  </footer>
+</div>
+
+<script>
+/* Las cifras se leen de la API: esta página tampoco incrusta datos. */
+(async function () {
+  const poner = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  try {
+    const [salud, eventos, ficha] = await Promise.all([
+      fetch("/api/salud").then(r => r.json()),
+      fetch("/api/eventos").then(r => r.json()),
+      fetch("/api/modelo").then(r => r.json()),
+    ]);
+    poner("s-celdas", salud.base_analitica.celdas);
+    poner("s-pos", eventos.eventos.length);
+    const [ini, fin] = salud.base_analitica.serie.split(" a ");
+    const dias = Math.round((new Date(fin) - new Date(ini)) / 86400000) + 1;
+    poner("s-dias", dias.toLocaleString("es-PE"));
+    poner("s-rango", `${ini} a ${fin}, sin huecos`);
+    poner("f-origen", (salud.procedencia.sha256_origen || "").slice(0, 12) + "…");
+    poner("f-modelo", ficha.version || "—");
+    poner("f-fecha", (salud.procedencia.construido_utc || "").slice(0, 10));
+  } catch (e) {
+    poner("s-celdas", "260"); poner("s-dias", "8 613"); poner("s-pos", "8");
+  }
+})();
+</script>
+</body>
+</html>

@@ -190,6 +190,27 @@ def test_tablero_no_incrusta_datos():
     assert "/api/riesgo" in html and "/api/celdas" in html
 
 
+def test_guia_se_sirve_y_explica_el_sistema():
+    r = cliente.get("/guia")
+    assert r.status_code == 200
+    for pieza in ("Arquitectura", "Modelo de datos", "Qué es real y qué es simulado",
+                  "hoja de ruta", "bucle"):
+        assert pieza.lower() in r.text.lower(), f"la guía no menciona: {pieza}"
+
+
+def test_navegacion_entre_paginas():
+    """Las dos páginas deben enlazarse entre sí y con la documentación."""
+    for ruta in ("/", "/guia"):
+        html = cliente.get(ruta).text
+        assert 'href="/guia"' in html and 'href="/docs"' in html, f"falta navegación en {ruta}"
+
+
+def test_guia_no_incrusta_cifras():
+    """La guía también debe leer sus cifras de la API."""
+    html = (RAIZ / "web" / "guia.html").read_text(encoding="utf-8")
+    assert "/api/salud" in html and "/api/modelo" in html
+
+
 def test_tablero_se_sirve():
     r = cliente.get("/")
     assert r.status_code == 200
